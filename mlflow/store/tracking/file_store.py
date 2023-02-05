@@ -348,7 +348,7 @@ class FileStore(AbstractStore):
         else:
             meta["lifecycle_stage"] = LifecycleStage.ACTIVE
         meta["tags"] = self.get_all_experiment_tags(experiment_id)
-        if meta.get('team_id') and meta.get('team_id') not in get_authorised_teams_from_token(jwt_auth_token):
+        if not meta.get('team_id') or (meta.get('team_id') and meta.get('team_id') not in get_authorised_teams_from_token(jwt_auth_token)):
             return None
         experiment = _read_persisted_experiment_dict(meta)
         if experiment_id != experiment.experiment_id:
@@ -379,9 +379,10 @@ class FileStore(AbstractStore):
             )
         return experiment
 
-    def delete_experiment(self, experiment_id):
+    def delete_experiment(self, experiment_id, jwt_auth_token=None):
         experiment_dir = self._get_experiment_path(experiment_id, ViewType.ACTIVE_ONLY)
-        if experiment_dir is None:
+        experiment = self._get_experiment(experiment_id, jwt_auth_token=jwt_auth_token)
+        if experiment_dir is None or experiment is None:
             raise MlflowException(
                 "Could not find experiment with ID %s" % experiment_id,
                 databricks_pb2.RESOURCE_DOES_NOT_EXIST,

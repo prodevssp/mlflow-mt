@@ -6,7 +6,7 @@ from mlflow.data import is_uri
 from mlflow.entities import ViewType
 from mlflow.exceptions import MlflowException
 from mlflow.tracking import _get_store, fluent
-from mlflow.utils.auth_utils import get_authorised_teams
+from mlflow.utils.auth_utils import get_authorised_teams, get_token_from_file
 from mlflow.protos.databricks_pb2 import INVALID_PARAMETER_VALUE
 
 
@@ -85,7 +85,8 @@ def list_experiments(view, token_file_path):
 
 @commands.command("delete")
 @EXPERIMENT_ID
-def delete_experiment(experiment_id):
+@TOKEN_FILE_PATH
+def delete_experiment(experiment_id, token_file_path):
     """
     Mark an active experiment for deletion. This also applies to experiment's metadata, runs and
     associated data, and artifacts if they are store in default location. Use ``list`` command to
@@ -102,7 +103,7 @@ def delete_experiment(experiment_id):
     workflow mechanism to clear ``.trash`` folder.
     """
     store = _get_store()
-    store.delete_experiment(experiment_id)
+    store.delete_experiment(experiment_id, get_token_from_file(token_file_path))
     click.echo("Experiment with ID %s has been deleted." % str(experiment_id))
 
 
