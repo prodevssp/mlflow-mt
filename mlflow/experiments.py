@@ -1,14 +1,18 @@
 import os
-
 import click
 from tabulate import tabulate
-
 import mlflow
 from mlflow.data import is_uri
 from mlflow.entities import ViewType
+from mlflow.exceptions import MlflowException
 from mlflow.tracking import _get_store, fluent
+from mlflow.utils.auth_utils import get_authorised_teams, get_token_from_file
+from mlflow.protos.databricks_pb2 import INVALID_PARAMETER_VALUE
+
 
 EXPERIMENT_ID = click.option("--experiment-id", "-x", type=click.STRING, required=True)
+TEAM_ID = click.option('--team-id', type=click.STRING, required=True)
+TOKEN_FILE_PATH = click.option('--token-file-path', type=click.STRING, required=True)
 
 
 @click.group("experiments")
@@ -31,7 +35,9 @@ def commands():
     "more info on the properties of artifact location. "
     "If no location is provided, the tracking server will pick a default.",
 )
-def create(experiment_name, artifact_location):
+@TEAM_ID
+@TOKEN_FILE_PATH
+def create(experiment_name, artifact_location, team_id, token_file_path):
     """
     Create an experiment.
 
@@ -43,7 +49,9 @@ def create(experiment_name, artifact_location):
     as subfolders.
     """
     store = _get_store()
-    exp_id = store.create_experiment(experiment_name, artifact_location)
+    if team_id not in get_authorised_teams(token_file_path):
+        raise MlflowException('Team {} not authorised to perform create operation'.format(team_id), INVALID_PARAMETER_VALUE)
+    exp_id = store.create_experiment(experiment_name, artifact_location, team_id=team_id, jwt_auth_token=get_token_from_file(token_file_path))
     click.echo("Created experiment '%s' with id %s" % (experiment_name, exp_id))
 
 
@@ -55,12 +63,13 @@ def create(experiment_name, artifact_location):
     help="Select view type for list experiments. Valid view types are "
     "'active_only' (default), 'deleted_only', and 'all'.",
 )
-def list_experiments(view):
+@TOKEN_FILE_PATH
+def list_experiments(view, token_file_path):
     """
     List all experiments in the configured tracking server.
     """
     view_type = ViewType.from_string(view) if view else ViewType.ACTIVE_ONLY
-    experiments = mlflow.list_experiments(view_type)
+    experiments = mlflow.list_experiments(view_type, token_file_path=token_file_path)
     table = [
         [
             exp.experiment_id,
@@ -76,7 +85,8 @@ def list_experiments(view):
 
 @commands.command("delete")
 @EXPERIMENT_ID
-def delete_experiment(experiment_id):
+@TOKEN_FILE_PATH
+def delete_experiment(experiment_id, token_file_path):
     """
     Mark an active experiment for deletion. This also applies to experiment's metadata, runs and
     associated data, and artifacts if they are store in default location. Use ``list`` command to
@@ -93,7 +103,7 @@ def delete_experiment(experiment_id):
     workflow mechanism to clear ``.trash`` folder.
     """
     store = _get_store()
-    store.delete_experiment(experiment_id)
+    store.delete_experiment(experiment_id, get_token_from_file(token_file_path))
     click.echo("Experiment with ID %s has been deleted." % str(experiment_id))
 
 
@@ -113,13 +123,14 @@ def restore_experiment(experiment_id):
 @commands.command("rename")
 @EXPERIMENT_ID
 @click.option("--new-name", type=click.STRING, required=True)
-def rename_experiment(experiment_id, new_name):
+@TOKEN_FILE_PATH
+def rename_experiment(experiment_id, new_name, token_file_path):
     """
     Renames an active experiment.
     Returns an error if the experiment is inactive.
     """
     store = _get_store()
-    store.rename_experiment(experiment_id, new_name)
+    store.rename_experiment(experiment_id, new_name, get_token_from_file(token_file_path))
     click.echo("Experiment with id %s has been renamed to '%s'." % (experiment_id, new_name))
 
 

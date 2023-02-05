@@ -64,6 +64,7 @@ from mlflow.utils.file_utils import (
 from mlflow.utils.string_utils import is_string_type
 from mlflow.utils.uri import append_to_uri_path
 from mlflow.utils.mlflow_tags import MLFLOW_LOGGED_MODELS
+from mlflow.utils.auth_utils import get_authorised_teams_from_token
 
 _TRACKING_DIR_ENV_VAR = "MLFLOW_TRACKING_DIR"
 
@@ -233,6 +234,7 @@ class FileStore(AbstractStore):
         view_type=ViewType.ACTIVE_ONLY,
         max_results=None,
         page_token=None,
+        jwt_auth_token=None
     ):
         """
         :param view_type: Qualify requested type of experiments.
@@ -240,6 +242,7 @@ class FileStore(AbstractStore):
                             passed, all experiments will be returned.
         :param page_token: Token specifying the next page of results. It should be obtained from
                            a ``list_experiments`` call.
+        :param jwt_auth_token: Token containing details of user along with teams the user belongs to
         :return: A :py:class:`PagedList <mlflow.store.entities.PagedList>` of
                  :py:class:`Experiment <mlflow.entities.Experiment>` objects. The pagination token
                  for the next page can be obtained via the ``token`` attribute of the object.
@@ -259,7 +262,7 @@ class FileStore(AbstractStore):
         for exp_id in rsl:
             try:
                 # trap and warn known issues, will raise unexpected exceptions to caller
-                experiment = self._get_experiment(exp_id, view_type)
+                experiment = self._get_experiment(exp_id, view_type, jwt_auth_token)
                 if experiment:
                     experiments.append(experiment)
             except MissingConfigException as rnfe:
@@ -278,7 +281,7 @@ class FileStore(AbstractStore):
         else:
             return PagedList(experiments, None)
 
-    def _create_experiment_with_id(self, name, experiment_id, artifact_uri, tags):
+    def _create_experiment_with_id(self, name, experiment_id, artifact_uri, tags, team_id):
         artifact_uri = artifact_uri or append_to_uri_path(
             self.artifact_root_uri, str(experiment_id)
         )
@@ -289,14 +292,15 @@ class FileStore(AbstractStore):
         # tags are added to the file system and are not written to this dict on write
         # As such, we should not include them in the meta file.
         del experiment_dict["tags"]
+        experiment_dict.update({'team_id': team_id})
         write_yaml(meta_dir, FileStore.META_DATA_FILE_NAME, experiment_dict)
         if tags is not None:
             for tag in tags:
                 self.set_experiment_tag(experiment_id, tag)
         return experiment_id
 
-    def _validate_experiment_does_not_exist(self, name):
-        experiment = self.get_experiment_by_name(name)
+    def _validate_experiment_does_not_exist(self, name, jwt_auth_token=None):
+        experiment = self.get_experiment_by_name(name, jwt_auth_token)
         if experiment is not None:
             if experiment.lifecycle_stage == LifecycleStage.DELETED:
                 raise MlflowException(
@@ -312,24 +316,24 @@ class FileStore(AbstractStore):
                     databricks_pb2.RESOURCE_ALREADY_EXISTS,
                 )
 
-    def create_experiment(self, name, artifact_location=None, tags=None):
+    def create_experiment(self, name, artifact_location=None, tags=None, team_id=None, jwt_auth_token=None):
         self._check_root_dir()
         _validate_experiment_name(name)
-        self._validate_experiment_does_not_exist(name)
+        self._validate_experiment_does_not_exist(name, jwt_auth_token)
         # Get all existing experiments and find the one with largest numerical ID.
         # len(list_all(..)) would not work when experiments are deleted.
         experiments_ids = [
             int(e.experiment_id)
-            for e in self.list_experiments(ViewType.ALL)
+            for e in self.list_experiments(ViewType.ALL, jwt_auth_token=jwt_auth_token)
             if e.experiment_id.isdigit()
         ]
         experiment_id = max(experiments_ids) + 1 if experiments_ids else 0
-        return self._create_experiment_with_id(name, str(experiment_id), artifact_location, tags)
+        return self._create_experiment_with_id(name, str(experiment_id), artifact_location, tags, team_id)
 
     def _has_experiment(self, experiment_id):
         return self._get_experiment_path(experiment_id) is not None
 
-    def _get_experiment(self, experiment_id, view_type=ViewType.ALL):
+    def _get_experiment(self, experiment_id, view_type=ViewType.ALL, jwt_auth_token=None):
         self._check_root_dir()
         _validate_experiment_id(experiment_id)
         experiment_dir = self._get_experiment_path(experiment_id, view_type)
@@ -344,6 +348,8 @@ class FileStore(AbstractStore):
         else:
             meta["lifecycle_stage"] = LifecycleStage.ACTIVE
         meta["tags"] = self.get_all_experiment_tags(experiment_id)
+        if not meta.get('team_id') or (meta.get('team_id') and meta.get('team_id') not in get_authorised_teams_from_token(jwt_auth_token)):
+            return None
         experiment = _read_persisted_experiment_dict(meta)
         if experiment_id != experiment.experiment_id:
             logging.warning(
@@ -373,9 +379,10 @@ class FileStore(AbstractStore):
             )
         return experiment
 
-    def delete_experiment(self, experiment_id):
+    def delete_experiment(self, experiment_id, jwt_auth_token=None):
         experiment_dir = self._get_experiment_path(experiment_id, ViewType.ACTIVE_ONLY)
-        if experiment_dir is None:
+        experiment = self._get_experiment(experiment_id, jwt_auth_token=jwt_auth_token)
+        if experiment_dir is None or experiment is None:
             raise MlflowException(
                 "Could not find experiment with ID %s" % experiment_id,
                 databricks_pb2.RESOURCE_DOES_NOT_EXIST,
@@ -398,17 +405,17 @@ class FileStore(AbstractStore):
             )
         mv(experiment_dir, self.root_directory)
 
-    def rename_experiment(self, experiment_id, new_name):
+    def rename_experiment(self, experiment_id, new_name, jwt_auth_token=None):
         _validate_experiment_name(new_name)
         meta_dir = os.path.join(self.root_directory, experiment_id)
         # if experiment is malformed, will raise error
-        experiment = self._get_experiment(experiment_id)
+        experiment = self._get_experiment(experiment_id, jwt_auth_token=jwt_auth_token)
         if experiment is None:
             raise MlflowException(
                 "Experiment '%s' does not exist." % experiment_id,
                 databricks_pb2.RESOURCE_DOES_NOT_EXIST,
             )
-        self._validate_experiment_does_not_exist(new_name)
+        self._validate_experiment_does_not_exist(new_name, jwt_auth_token=jwt_auth_token)
         experiment._set_name(new_name)
         if experiment.lifecycle_stage != LifecycleStage.ACTIVE:
             raise Exception(
