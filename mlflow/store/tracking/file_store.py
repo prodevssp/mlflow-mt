@@ -405,11 +405,11 @@ class FileStore(AbstractStore):
             )
         mv(experiment_dir, self.root_directory)
 
-    def rename_experiment(self, experiment_id, new_name):
+    def rename_experiment(self, experiment_id, new_name, jwt_auth_token=None):
         _validate_experiment_name(new_name)
         meta_dir = os.path.join(self.root_directory, experiment_id)
         # if experiment is malformed, will raise error
-        experiment = self._get_experiment(experiment_id)
+        experiment = self._get_experiment(experiment_id, jwt_auth_token=jwt_auth_token)
         if experiment is None:
             raise MlflowException(
                 "Experiment '%s' does not exist." % experiment_id,

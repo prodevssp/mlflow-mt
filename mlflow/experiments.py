@@ -123,13 +123,14 @@ def restore_experiment(experiment_id):
 @commands.command("rename")
 @EXPERIMENT_ID
 @click.option("--new-name", type=click.STRING, required=True)
-def rename_experiment(experiment_id, new_name):
+@TOKEN_FILE_PATH
+def rename_experiment(experiment_id, new_name, token_file_path):
     """
     Renames an active experiment.
     Returns an error if the experiment is inactive.
     """
     store = _get_store()
-    store.rename_experiment(experiment_id, new_name)
+    store.rename_experiment(experiment_id, new_name, get_token_from_file(token_file_path))
     click.echo("Experiment with id %s has been renamed to '%s'." % (experiment_id, new_name))
 
 
