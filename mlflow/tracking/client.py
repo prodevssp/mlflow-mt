@@ -37,6 +37,8 @@ from mlflow.utils.databricks_utils import (
 )
 from mlflow.utils.logging_utils import eprint
 from mlflow.utils.uri import is_databricks_uri, construct_run_url
+from mlflow.utils.auth_utils import get_authorised_teams, get_token_from_file
+from mlflow.protos.databricks_pb2 import INVALID_PARAMETER_VALUE
 
 if TYPE_CHECKING:
     import matplotlib  # pylint: disable=unused-import
@@ -55,7 +57,7 @@ class MlflowClient:
     can keep the implementation of the tracking and registry clients independent from each other.
     """
 
-    def __init__(self, tracking_uri: Optional[str] = None, registry_uri: Optional[str] = None):
+    def __init__(self, tracking_uri: Optional[str] = None, registry_uri: Optional[str] = None, token_file_path: Optional[str] = None):
         """
         :param tracking_uri: Address of local or remote tracking server. If not provided, defaults
                              to the service set by ``mlflow.tracking.set_tracking_uri``. See
@@ -68,6 +70,7 @@ class MlflowClient:
         final_tracking_uri = utils._resolve_tracking_uri(tracking_uri)
         self._registry_uri = registry_utils._resolve_registry_uri(registry_uri, tracking_uri)
         self._tracking_client = TrackingServiceClient(final_tracking_uri)
+        self._token_file_path = token_file_path
         # `MlflowClient` also references a `ModelRegistryClient` instance that is provided by the
         # `MlflowClient._get_registry_client()` method. This `ModelRegistryClient` is not explicitly
         # defined as an instance variable in the `MlflowClient` constructor; an instance variable
@@ -393,7 +396,8 @@ class MlflowClient:
             - experiment_id: 2, name: Experiment 2, lifecycle_stage: deleted
         """
         return self._tracking_client.list_experiments(
-            view_type=view_type, max_results=max_results, page_token=page_token
+            view_type=view_type, max_results=max_results, page_token=page_token,
+            jwt_auth_token=get_token_from_file(self._token_file_path)
         )
 
     def get_experiment(self, experiment_id: str) -> Experiment:

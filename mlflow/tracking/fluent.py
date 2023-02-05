@@ -964,16 +964,18 @@ def get_experiment_by_name(name: str) -> Optional[Experiment]:
 def list_experiments(
     view_type: int = ViewType.ACTIVE_ONLY,
     max_results: Optional[int] = None,
+    token_file_path: Optional[str] = None
 ) -> List[Experiment]:
     """
     :param view_type: Qualify requested type of experiments.
     :param max_results: If passed, specifies the maximum number of experiments desired. If not
                         passed, all experiments will be returned.
+    :param token_file_path: file path from which the jwt token can be fetched from
     :return: A list of :py:class:`Experiment <mlflow.entities.Experiment>` objects.
     """
 
     def pagination_wrapper_func(number_to_get, next_page_token):
-        return MlflowClient().list_experiments(
+        return MlflowClient(token_file_path=token_file_path).list_experiments(
             view_type=view_type,
             max_results=number_to_get,
             page_token=next_page_token,

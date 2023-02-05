@@ -63,12 +63,13 @@ def create(experiment_name, artifact_location, team_id, token_file_path):
     help="Select view type for list experiments. Valid view types are "
     "'active_only' (default), 'deleted_only', and 'all'.",
 )
-def list_experiments(view):
+@TOKEN_FILE_PATH
+def list_experiments(view, token_file_path):
     """
     List all experiments in the configured tracking server.
     """
     view_type = ViewType.from_string(view) if view else ViewType.ACTIVE_ONLY
-    experiments = mlflow.list_experiments(view_type)
+    experiments = mlflow.list_experiments(view_type, token_file_path=token_file_path)
     table = [
         [
             exp.experiment_id,

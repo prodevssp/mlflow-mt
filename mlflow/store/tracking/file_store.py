@@ -64,6 +64,7 @@ from mlflow.utils.file_utils import (
 from mlflow.utils.string_utils import is_string_type
 from mlflow.utils.uri import append_to_uri_path
 from mlflow.utils.mlflow_tags import MLFLOW_LOGGED_MODELS
+from mlflow.utils.auth_utils import get_authorised_teams_from_token
 
 _TRACKING_DIR_ENV_VAR = "MLFLOW_TRACKING_DIR"
 
@@ -233,6 +234,7 @@ class FileStore(AbstractStore):
         view_type=ViewType.ACTIVE_ONLY,
         max_results=None,
         page_token=None,
+        jwt_auth_token=None
     ):
         """
         :param view_type: Qualify requested type of experiments.
@@ -240,6 +242,7 @@ class FileStore(AbstractStore):
                             passed, all experiments will be returned.
         :param page_token: Token specifying the next page of results. It should be obtained from
                            a ``list_experiments`` call.
+        :param jwt_auth_token: Token containing details of user along with teams the user belongs to
         :return: A :py:class:`PagedList <mlflow.store.entities.PagedList>` of
                  :py:class:`Experiment <mlflow.entities.Experiment>` objects. The pagination token
                  for the next page can be obtained via the ``token`` attribute of the object.
@@ -259,7 +262,7 @@ class FileStore(AbstractStore):
         for exp_id in rsl:
             try:
                 # trap and warn known issues, will raise unexpected exceptions to caller
-                experiment = self._get_experiment(exp_id, view_type)
+                experiment = self._get_experiment(exp_id, view_type, jwt_auth_token)
                 if experiment:
                     experiments.append(experiment)
             except MissingConfigException as rnfe:
@@ -330,7 +333,7 @@ class FileStore(AbstractStore):
     def _has_experiment(self, experiment_id):
         return self._get_experiment_path(experiment_id) is not None
 
-    def _get_experiment(self, experiment_id, view_type=ViewType.ALL):
+    def _get_experiment(self, experiment_id, view_type=ViewType.ALL, jwt_auth_token=None):
         self._check_root_dir()
         _validate_experiment_id(experiment_id)
         experiment_dir = self._get_experiment_path(experiment_id, view_type)
@@ -345,6 +348,8 @@ class FileStore(AbstractStore):
         else:
             meta["lifecycle_stage"] = LifecycleStage.ACTIVE
         meta["tags"] = self.get_all_experiment_tags(experiment_id)
+        if meta.get('team_id') and meta.get('team_id') not in get_authorised_teams_from_token(jwt_auth_token):
+            return None
         experiment = _read_persisted_experiment_dict(meta)
         if experiment_id != experiment.experiment_id:
             logging.warning(
