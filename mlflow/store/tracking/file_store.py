@@ -278,7 +278,7 @@ class FileStore(AbstractStore):
         else:
             return PagedList(experiments, None)
 
-    def _create_experiment_with_id(self, name, experiment_id, artifact_uri, tags):
+    def _create_experiment_with_id(self, name, experiment_id, artifact_uri, tags, team_id):
         artifact_uri = artifact_uri or append_to_uri_path(
             self.artifact_root_uri, str(experiment_id)
         )
@@ -289,6 +289,7 @@ class FileStore(AbstractStore):
         # tags are added to the file system and are not written to this dict on write
         # As such, we should not include them in the meta file.
         del experiment_dict["tags"]
+        experiment_dict.update({'team_id': team_id})
         write_yaml(meta_dir, FileStore.META_DATA_FILE_NAME, experiment_dict)
         if tags is not None:
             for tag in tags:
@@ -312,7 +313,7 @@ class FileStore(AbstractStore):
                     databricks_pb2.RESOURCE_ALREADY_EXISTS,
                 )
 
-    def create_experiment(self, name, artifact_location=None, tags=None):
+    def create_experiment(self, name, artifact_location=None, tags=None, team_id=None):
         self._check_root_dir()
         _validate_experiment_name(name)
         self._validate_experiment_does_not_exist(name)
@@ -324,7 +325,7 @@ class FileStore(AbstractStore):
             if e.experiment_id.isdigit()
         ]
         experiment_id = max(experiments_ids) + 1 if experiments_ids else 0
-        return self._create_experiment_with_id(name, str(experiment_id), artifact_location, tags)
+        return self._create_experiment_with_id(name, str(experiment_id), artifact_location, tags, team_id)
 
     def _has_experiment(self, experiment_id):
         return self._get_experiment_path(experiment_id) is not None

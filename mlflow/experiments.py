@@ -1,14 +1,18 @@
 import os
-
 import click
 from tabulate import tabulate
-
 import mlflow
 from mlflow.data import is_uri
 from mlflow.entities import ViewType
+from mlflow.exceptions import MlflowException
 from mlflow.tracking import _get_store, fluent
+from mlflow.utils.auth_utils import get_authorised_teams
+from mlflow.protos.databricks_pb2 import INVALID_PARAMETER_VALUE
+
 
 EXPERIMENT_ID = click.option("--experiment-id", "-x", type=click.STRING, required=True)
+TEAM_ID = click.option('--team-id', type=click.STRING, required=True)
+TOKEN_FILE_PATH = click.option('--token-file-path', type=click.STRING, required=True)
 
 
 @click.group("experiments")
@@ -31,7 +35,9 @@ def commands():
     "more info on the properties of artifact location. "
     "If no location is provided, the tracking server will pick a default.",
 )
-def create(experiment_name, artifact_location):
+@TEAM_ID
+@TOKEN_FILE_PATH
+def create(experiment_name, artifact_location, team_id, token_file_path):
     """
     Create an experiment.
 
@@ -43,7 +49,9 @@ def create(experiment_name, artifact_location):
     as subfolders.
     """
     store = _get_store()
-    exp_id = store.create_experiment(experiment_name, artifact_location)
+    if team_id not in get_authorised_teams(token_file_path):
+        raise MlflowException('Team {} not authorised to perform create operation'.format(team_id), INVALID_PARAMETER_VALUE)
+    exp_id = store.create_experiment(experiment_name, artifact_location, team_id=team_id)
     click.echo("Created experiment '%s' with id %s" % (experiment_name, exp_id))
 
 
