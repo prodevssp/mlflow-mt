@@ -1,12 +1,12 @@
 import os
-
 import click
-from tabulate import tabulate
-
 import mlflow
 from mlflow.data import is_uri
+from tabulate import tabulate
 from mlflow.entities import ViewType
 from mlflow.tracking import _get_store, fluent
+from mlflow.utils.auth_utils import get_jwt_token_for_user
+
 
 EXPERIMENT_ID = click.option("--experiment-id", "-x", type=click.STRING, required=True)
 
@@ -17,7 +17,8 @@ def commands():
     Manage experiments. To manage experiments associated with a tracking server, set the
     MLFLOW_TRACKING_URI environment variable to the URL of the desired server.
     """
-    pass
+    if not os.environ.get('JWT_AUTH_TOKEN'):
+        os.environ['JWT_AUTH_TOKEN'] = get_jwt_token_for_user()
 
 
 @commands.command()
