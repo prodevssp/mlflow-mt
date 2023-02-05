@@ -21,7 +21,7 @@ class AbstractStore:
         pass
 
     @abstractmethod
-    def list_experiments(self, view_type=ViewType.ACTIVE_ONLY, max_results=None, page_token=None):
+    def list_experiments(self, view_type=ViewType.ACTIVE_ONLY, max_results=None, page_token=None, jwt_auth_token=None):
         """
         :param view_type: Qualify requested type of experiments.
         :param max_results: If passed, specifies the maximum number of experiments desired. If not
@@ -30,6 +30,7 @@ class AbstractStore:
                             see if additional experiments are available.
         :param page_token: Token specifying the next page of results. It should be obtained from
                             a ``list_experiments`` call.
+        :param jwt_auth_token: Token containing user data along with teams of which user is a part of.
         :return: A :py:class:`PagedList <mlflow.store.entities.PagedList>` of
                  :py:class:`Experiment <mlflow.entities.Experiment>` objects. The pagination token
                  for the next page can be obtained via the ``token`` attribute of the object.
@@ -63,17 +64,18 @@ class AbstractStore:
         """
         pass
 
-    def get_experiment_by_name(self, experiment_name):
+    def get_experiment_by_name(self, experiment_name, jwt_auth_token=None):
         """
         Fetch the experiment by name from the backend store.
         This is a base implementation using ``list_experiments``, derived classes may have
         some specialized implementations.
 
         :param experiment_name: Name of experiment
+        :param jwt_auth_token: JWT token containing user data along with team the user is a part of.
 
         :return: A single :py:class:`mlflow.entities.Experiment` object if it exists.
         """
-        for experiment in self.list_experiments(ViewType.ALL):
+        for experiment in self.list_experiments(ViewType.ALL, jwt_auth_token=jwt_auth_token):
             if experiment.name == experiment_name:
                 return experiment
         return None

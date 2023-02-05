@@ -299,8 +299,8 @@ class FileStore(AbstractStore):
                 self.set_experiment_tag(experiment_id, tag)
         return experiment_id
 
-    def _validate_experiment_does_not_exist(self, name):
-        experiment = self.get_experiment_by_name(name)
+    def _validate_experiment_does_not_exist(self, name, jwt_auth_token=None):
+        experiment = self.get_experiment_by_name(name, jwt_auth_token)
         if experiment is not None:
             if experiment.lifecycle_stage == LifecycleStage.DELETED:
                 raise MlflowException(
@@ -316,15 +316,15 @@ class FileStore(AbstractStore):
                     databricks_pb2.RESOURCE_ALREADY_EXISTS,
                 )
 
-    def create_experiment(self, name, artifact_location=None, tags=None, team_id=None):
+    def create_experiment(self, name, artifact_location=None, tags=None, team_id=None, jwt_auth_token=None):
         self._check_root_dir()
         _validate_experiment_name(name)
-        self._validate_experiment_does_not_exist(name)
+        self._validate_experiment_does_not_exist(name, jwt_auth_token)
         # Get all existing experiments and find the one with largest numerical ID.
         # len(list_all(..)) would not work when experiments are deleted.
         experiments_ids = [
             int(e.experiment_id)
-            for e in self.list_experiments(ViewType.ALL)
+            for e in self.list_experiments(ViewType.ALL, jwt_auth_token=jwt_auth_token)
             if e.experiment_id.isdigit()
         ]
         experiment_id = max(experiments_ids) + 1 if experiments_ids else 0
@@ -415,7 +415,7 @@ class FileStore(AbstractStore):
                 "Experiment '%s' does not exist." % experiment_id,
                 databricks_pb2.RESOURCE_DOES_NOT_EXIST,
             )
-        self._validate_experiment_does_not_exist(new_name)
+        self._validate_experiment_does_not_exist(new_name, jwt_auth_token=jwt_auth_token)
         experiment._set_name(new_name)
         if experiment.lifecycle_stage != LifecycleStage.ACTIVE:
             raise Exception(

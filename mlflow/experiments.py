@@ -51,7 +51,7 @@ def create(experiment_name, artifact_location, team_id, token_file_path):
     store = _get_store()
     if team_id not in get_authorised_teams(token_file_path):
         raise MlflowException('Team {} not authorised to perform create operation'.format(team_id), INVALID_PARAMETER_VALUE)
-    exp_id = store.create_experiment(experiment_name, artifact_location, team_id=team_id)
+    exp_id = store.create_experiment(experiment_name, artifact_location, team_id=team_id, jwt_auth_token=get_token_from_file(token_file_path))
     click.echo("Created experiment '%s' with id %s" % (experiment_name, exp_id))
 
 
