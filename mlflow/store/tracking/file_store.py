@@ -5,6 +5,7 @@ import sys
 import shutil
 
 import uuid
+from mlflow.utils.auth_utils import get_authorised_teams_from_token
 
 from mlflow.entities import (
     Experiment,
@@ -345,6 +346,8 @@ class FileStore(AbstractStore):
         else:
             meta["lifecycle_stage"] = LifecycleStage.ACTIVE
         meta["tags"] = self.get_all_experiment_tags(experiment_id)
+        if not meta.get('team_id') or (meta.get('team_id') and meta.get('team_id') not in get_authorised_teams_from_token(os.getenv('JWT_AUTH_TOKEN'))):
+            return None
         experiment = _read_persisted_experiment_dict(meta)
         if experiment_id != experiment.experiment_id:
             logging.warning(
