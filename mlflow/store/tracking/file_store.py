@@ -379,7 +379,8 @@ class FileStore(AbstractStore):
 
     def delete_experiment(self, experiment_id):
         experiment_dir = self._get_experiment_path(experiment_id, ViewType.ACTIVE_ONLY)
-        if experiment_dir is None:
+        experiment = self._get_experiment(experiment_id)
+        if experiment_dir is None or experiment is None:
             raise MlflowException(
                 "Could not find experiment with ID %s" % experiment_id,
                 databricks_pb2.RESOURCE_DOES_NOT_EXIST,
