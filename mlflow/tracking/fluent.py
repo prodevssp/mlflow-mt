@@ -39,6 +39,7 @@ from mlflow.utils.mlflow_tags import (
     MLFLOW_RUN_NOTE,
 )
 from mlflow.utils.validation import _validate_run_id, _validate_experiment_id_type
+from mlflow.utils.auth_utils import get_authorised_teams_from_token
 
 if TYPE_CHECKING:
     import pandas  # pylint: disable=unused-import
@@ -986,6 +987,7 @@ def create_experiment(
     name: str,
     artifact_location: Optional[str] = None,
     tags: Optional[Dict[str, Any]] = None,
+    team_id: Optional[str] = None
 ) -> str:
     """
     Create an experiment.
@@ -995,6 +997,7 @@ def create_experiment(
                               If not provided, the server picks an appropriate default.
     :param tags: An optional dictionary of string keys and values to set as
                             tags on the experiment.
+    :param team_id: Team id under which the experiment is created
     :return: String ID of the created experiment.
 
     .. code-block:: python
@@ -1020,7 +1023,9 @@ def create_experiment(
         Tags= {}
         Lifecycle_stage: active
     """
-    return MlflowClient().create_experiment(name, artifact_location, tags)
+    if team_id not in get_authorised_teams_from_token(os.environ.get('JWT_AUTH_TOKEN')):
+        raise MlflowException('Team {} not authorised to perform create operation'.format(team_id), INVALID_PARAMETER_VALUE)
+    return MlflowClient().create_experiment(name, artifact_location, tags, team_id=team_id)
 
 
 def delete_experiment(experiment_id: str) -> None:

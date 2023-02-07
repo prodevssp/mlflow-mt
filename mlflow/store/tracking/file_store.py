@@ -234,6 +234,7 @@ class FileStore(AbstractStore):
         view_type=ViewType.ACTIVE_ONLY,
         max_results=None,
         page_token=None,
+        team_validation=True
     ):
         """
         :param view_type: Qualify requested type of experiments.
@@ -260,7 +261,7 @@ class FileStore(AbstractStore):
         for exp_id in rsl:
             try:
                 # trap and warn known issues, will raise unexpected exceptions to caller
-                experiment = self._get_experiment(exp_id, view_type)
+                experiment = self._get_experiment(exp_id, view_type, team_validation=team_validation)
                 if experiment:
                     experiments.append(experiment)
             except MissingConfigException as rnfe:
@@ -322,7 +323,7 @@ class FileStore(AbstractStore):
         # len(list_all(..)) would not work when experiments are deleted.
         experiments_ids = [
             int(e.experiment_id)
-            for e in self.list_experiments(ViewType.ALL)
+            for e in self.list_experiments(ViewType.ALL, team_validation=False)
             if e.experiment_id.isdigit()
         ]
         experiment_id = max(experiments_ids) + 1 if experiments_ids else 0
@@ -331,7 +332,7 @@ class FileStore(AbstractStore):
     def _has_experiment(self, experiment_id):
         return self._get_experiment_path(experiment_id) is not None
 
-    def _get_experiment(self, experiment_id, view_type=ViewType.ALL):
+    def _get_experiment(self, experiment_id, view_type=ViewType.ALL, team_validation=True):
         self._check_root_dir()
         _validate_experiment_id(experiment_id)
         experiment_dir = self._get_experiment_path(experiment_id, view_type)
@@ -346,7 +347,7 @@ class FileStore(AbstractStore):
         else:
             meta["lifecycle_stage"] = LifecycleStage.ACTIVE
         meta["tags"] = self.get_all_experiment_tags(experiment_id)
-        if not meta.get('team_id') or (meta.get('team_id') and meta.get('team_id') not in get_authorised_teams_from_token(os.getenv('JWT_AUTH_TOKEN'))):
+        if (team_validation and not meta.get('team_id')) or (team_validation and meta.get('team_id') and meta.get('team_id') not in get_authorised_teams_from_token(os.getenv('JWT_AUTH_TOKEN'))):
             return None
         experiment = _read_persisted_experiment_dict(meta)
         if experiment_id != experiment.experiment_id:
