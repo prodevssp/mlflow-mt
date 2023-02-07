@@ -4,6 +4,8 @@ Utilities for validating user inputs such as metric names and parameter names.
 import numbers
 import posixpath
 import re
+import os
+from mlflow.utils.auth_utils import get_authorised_teams_from_token
 
 from mlflow.exceptions import MlflowException
 from mlflow.protos.databricks_pb2 import INVALID_PARAMETER_VALUE
@@ -386,3 +388,12 @@ def _validate_db_type_string(db_type):
     if db_type not in DATABASE_ENGINES:
         error_msg = "Invalid database engine: '%s'. '%s'" % (db_type, _UNSUPPORTED_DB_TYPE_MSG)
         raise MlflowException(error_msg, INVALID_PARAMETER_VALUE)
+
+
+def _validate_creation_team(team_id):
+    if not team_id:
+        raise MlflowException("Parameter team_id is missing", INVALID_PARAMETER_VALUE)
+    if not os.getenv('JWT_AUTH_TOKEN'):
+        raise MlflowException("JWT_AUTH_TOKEN must be set in environment", INVALID_PARAMETER_VALUE)
+    if team_id not in get_authorised_teams_from_token(os.getenv('JWT_AUTH_TOKEN')):
+        raise MlflowException('Team {} does not access to create experiment'.format(team_id), INVALID_PARAMETER_VALUE)

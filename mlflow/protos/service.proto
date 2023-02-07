@@ -659,6 +659,18 @@ message Experiment {
   repeated ExperimentTag tags = 7;
 }
 
+// Team Experiment Details
+ message TeamExperimentDetails {
+     // Unique identifier for team experiment map
+     required int64 id = 1;
+
+     // Team Id to which the experiment is mapped
+     required string team_id = 2;
+
+     // Experiment Id which is created under the team id
+     required string experiment_id = 3;
+ }
+
 message CreateExperiment {
   option (scalapb.message).extends = "com.databricks.rpc.RPC[$this.Response]";
 
@@ -674,6 +686,9 @@ message CreateExperiment {
   // to 250 bytes in size and tag values up to 5000 bytes in size. All storage backends are also
   // guaranteed to support up to 20 tags per request.
   repeated ExperimentTag tags = 3;
+
+  // Id of the team to which the created experiment belongs
+  optional string team_id = 4;
 
   message Response {
     // Unique identifier for the experiment.

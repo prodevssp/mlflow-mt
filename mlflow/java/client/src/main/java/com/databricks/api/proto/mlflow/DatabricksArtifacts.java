@@ -352,86 +352,6 @@ public final class DatabricksArtifacts {
     getUnknownFields() {
       return this.unknownFields;
     }
-    private ArtifactCredentialInfo(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 10: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000001;
-              runId_ = bs;
-              break;
-            }
-            case 18: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000002;
-              path_ = bs;
-              break;
-            }
-            case 26: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000004;
-              signedUri_ = bs;
-              break;
-            }
-            case 34: {
-              if (!((mutable_bitField0_ & 0x00000008) != 0)) {
-                headers_ = new java.util.ArrayList<com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialInfo.HttpHeader>();
-                mutable_bitField0_ |= 0x00000008;
-              }
-              headers_.add(
-                  input.readMessage(com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialInfo.HttpHeader.PARSER, extensionRegistry));
-              break;
-            }
-            case 40: {
-              int rawValue = input.readEnum();
-                @SuppressWarnings("deprecation")
-              com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialType value = com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialType.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(5, rawValue);
-              } else {
-                bitField0_ |= 0x00000008;
-                type_ = rawValue;
-              }
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000008) != 0)) {
-          headers_ = java.util.Collections.unmodifiableList(headers_);
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return com.databricks.api.proto.mlflow.DatabricksArtifacts.internal_static_mlflow_ArtifactCredentialInfo_descriptor;
@@ -536,56 +456,6 @@ public final class DatabricksArtifacts {
       getUnknownFields() {
         return this.unknownFields;
       }
-      private HttpHeader(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        this();
-        if (extensionRegistry == null) {
-          throw new java.lang.NullPointerException();
-        }
-        int mutable_bitField0_ = 0;
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-            com.google.protobuf.UnknownFieldSet.newBuilder();
-        try {
-          boolean done = false;
-          while (!done) {
-            int tag = input.readTag();
-            switch (tag) {
-              case 0:
-                done = true;
-                break;
-              case 10: {
-                com.google.protobuf.ByteString bs = input.readBytes();
-                bitField0_ |= 0x00000001;
-                name_ = bs;
-                break;
-              }
-              case 18: {
-                com.google.protobuf.ByteString bs = input.readBytes();
-                bitField0_ |= 0x00000002;
-                value_ = bs;
-                break;
-              }
-              default: {
-                if (!parseUnknownField(
-                    input, unknownFields, extensionRegistry, tag)) {
-                  done = true;
-                }
-                break;
-              }
-            }
-          }
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          throw e.setUnfinishedMessage(this);
-        } catch (java.io.IOException e) {
-          throw new com.google.protobuf.InvalidProtocolBufferException(
-              e).setUnfinishedMessage(this);
-        } finally {
-          this.unknownFields = unknownFields.build();
-          makeExtensionsImmutable();
-        }
-      }
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.databricks.api.proto.mlflow.DatabricksArtifacts.internal_static_mlflow_ArtifactCredentialInfo_HttpHeader_descriptor;
@@ -601,7 +471,8 @@ public final class DatabricksArtifacts {
 
       private int bitField0_;
       public static final int NAME_FIELD_NUMBER = 1;
-      private volatile java.lang.Object name_;
+      @SuppressWarnings("serial")
+      private volatile java.lang.Object name_ = "";
       /**
        * <pre>
        * The HTTP header name
@@ -661,7 +532,8 @@ public final class DatabricksArtifacts {
       }
 
       public static final int VALUE_FIELD_NUMBER = 2;
-      private volatile java.lang.Object value_;
+      @SuppressWarnings("serial")
+      private volatile java.lang.Object value_ = "";
       /**
        * <pre>
        * The HTTP header value
@@ -740,7 +612,7 @@ public final class DatabricksArtifacts {
         if (((bitField0_ & 0x00000002) != 0)) {
           com.google.protobuf.GeneratedMessageV3.writeString(output, 2, value_);
         }
-        unknownFields.writeTo(output);
+        getUnknownFields().writeTo(output);
       }
 
       @java.lang.Override
@@ -755,7 +627,7 @@ public final class DatabricksArtifacts {
         if (((bitField0_ & 0x00000002) != 0)) {
           size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, value_);
         }
-        size += unknownFields.getSerializedSize();
+        size += getUnknownFields().getSerializedSize();
         memoizedSize = size;
         return size;
       }
@@ -780,7 +652,7 @@ public final class DatabricksArtifacts {
           if (!getValue()
               .equals(other.getValue())) return false;
         }
-        if (!unknownFields.equals(other.unknownFields)) return false;
+        if (!getUnknownFields().equals(other.getUnknownFields())) return false;
         return true;
       }
 
@@ -799,7 +671,7 @@ public final class DatabricksArtifacts {
           hash = (37 * hash) + VALUE_FIELD_NUMBER;
           hash = (53 * hash) + getValue().hashCode();
         }
-        hash = (29 * hash) + unknownFields.hashCode();
+        hash = (29 * hash) + getUnknownFields().hashCode();
         memoizedHashCode = hash;
         return hash;
       }
@@ -916,26 +788,20 @@ public final class DatabricksArtifacts {
 
         // Construct using com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialInfo.HttpHeader.newBuilder()
         private Builder() {
-          maybeForceBuilderInitialization();
+
         }
 
         private Builder(
             com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
           super(parent);
-          maybeForceBuilderInitialization();
-        }
-        private void maybeForceBuilderInitialization() {
-          if (com.google.protobuf.GeneratedMessageV3
-                  .alwaysUseFieldBuilders) {
-          }
+
         }
         @java.lang.Override
         public Builder clear() {
           super.clear();
+          bitField0_ = 0;
           name_ = "";
-          bitField0_ = (bitField0_ & ~0x00000001);
           value_ = "";
-          bitField0_ = (bitField0_ & ~0x00000002);
           return this;
         }
 
@@ -962,19 +828,23 @@ public final class DatabricksArtifacts {
         @java.lang.Override
         public com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialInfo.HttpHeader buildPartial() {
           com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialInfo.HttpHeader result = new com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialInfo.HttpHeader(this);
+          if (bitField0_ != 0) { buildPartial0(result); }
+          onBuilt();
+          return result;
+        }
+
+        private void buildPartial0(com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialInfo.HttpHeader result) {
           int from_bitField0_ = bitField0_;
           int to_bitField0_ = 0;
           if (((from_bitField0_ & 0x00000001) != 0)) {
+            result.name_ = name_;
             to_bitField0_ |= 0x00000001;
           }
-          result.name_ = name_;
           if (((from_bitField0_ & 0x00000002) != 0)) {
+            result.value_ = value_;
             to_bitField0_ |= 0x00000002;
           }
-          result.value_ = value_;
-          result.bitField0_ = to_bitField0_;
-          onBuilt();
-          return result;
+          result.bitField0_ |= to_bitField0_;
         }
 
         @java.lang.Override
@@ -1022,16 +892,16 @@ public final class DatabricksArtifacts {
         public Builder mergeFrom(com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialInfo.HttpHeader other) {
           if (other == com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialInfo.HttpHeader.getDefaultInstance()) return this;
           if (other.hasName()) {
-            bitField0_ |= 0x00000001;
             name_ = other.name_;
+            bitField0_ |= 0x00000001;
             onChanged();
           }
           if (other.hasValue()) {
-            bitField0_ |= 0x00000002;
             value_ = other.value_;
+            bitField0_ |= 0x00000002;
             onChanged();
           }
-          this.mergeUnknownFields(other.unknownFields);
+          this.mergeUnknownFields(other.getUnknownFields());
           onChanged();
           return this;
         }
@@ -1046,17 +916,40 @@ public final class DatabricksArtifacts {
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
-          com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialInfo.HttpHeader parsedMessage = null;
+          if (extensionRegistry == null) {
+            throw new java.lang.NullPointerException();
+          }
           try {
-            parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+            boolean done = false;
+            while (!done) {
+              int tag = input.readTag();
+              switch (tag) {
+                case 0:
+                  done = true;
+                  break;
+                case 10: {
+                  name_ = input.readBytes();
+                  bitField0_ |= 0x00000001;
+                  break;
+                } // case 10
+                case 18: {
+                  value_ = input.readBytes();
+                  bitField0_ |= 0x00000002;
+                  break;
+                } // case 18
+                default: {
+                  if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                    done = true; // was an endgroup tag
+                  }
+                  break;
+                } // default:
+              } // switch (tag)
+            } // while (!done)
           } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-            parsedMessage = (com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialInfo.HttpHeader) e.getUnfinishedMessage();
             throw e.unwrapIOException();
           } finally {
-            if (parsedMessage != null) {
-              mergeFrom(parsedMessage);
-            }
-          }
+            onChanged();
+          } // finally
           return this;
         }
         private int bitField0_;
@@ -1127,11 +1020,9 @@ public final class DatabricksArtifacts {
          */
         public Builder setName(
             java.lang.String value) {
-          if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
+          if (value == null) { throw new NullPointerException(); }
           name_ = value;
+          bitField0_ |= 0x00000001;
           onChanged();
           return this;
         }
@@ -1144,8 +1035,8 @@ public final class DatabricksArtifacts {
          * @return This builder for chaining.
          */
         public Builder clearName() {
-          bitField0_ = (bitField0_ & ~0x00000001);
           name_ = getDefaultInstance().getName();
+          bitField0_ = (bitField0_ & ~0x00000001);
           onChanged();
           return this;
         }
@@ -1160,11 +1051,9 @@ public final class DatabricksArtifacts {
          */
         public Builder setNameBytes(
             com.google.protobuf.ByteString value) {
-          if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
+          if (value == null) { throw new NullPointerException(); }
           name_ = value;
+          bitField0_ |= 0x00000001;
           onChanged();
           return this;
         }
@@ -1235,11 +1124,9 @@ public final class DatabricksArtifacts {
          */
         public Builder setValue(
             java.lang.String value) {
-          if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
+          if (value == null) { throw new NullPointerException(); }
           value_ = value;
+          bitField0_ |= 0x00000002;
           onChanged();
           return this;
         }
@@ -1252,8 +1139,8 @@ public final class DatabricksArtifacts {
          * @return This builder for chaining.
          */
         public Builder clearValue() {
-          bitField0_ = (bitField0_ & ~0x00000002);
           value_ = getDefaultInstance().getValue();
+          bitField0_ = (bitField0_ & ~0x00000002);
           onChanged();
           return this;
         }
@@ -1268,11 +1155,9 @@ public final class DatabricksArtifacts {
          */
         public Builder setValueBytes(
             com.google.protobuf.ByteString value) {
-          if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
+          if (value == null) { throw new NullPointerException(); }
           value_ = value;
+          bitField0_ |= 0x00000002;
           onChanged();
           return this;
         }
@@ -1309,7 +1194,18 @@ public final class DatabricksArtifacts {
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
-          return new HttpHeader(input, extensionRegistry);
+          Builder builder = newBuilder();
+          try {
+            builder.mergeFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            throw e.setUnfinishedMessage(builder.buildPartial());
+          } catch (com.google.protobuf.UninitializedMessageException e) {
+            throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+          } catch (java.io.IOException e) {
+            throw new com.google.protobuf.InvalidProtocolBufferException(e)
+                .setUnfinishedMessage(builder.buildPartial());
+          }
+          return builder.buildPartial();
         }
       };
 
@@ -1331,7 +1227,8 @@ public final class DatabricksArtifacts {
 
     private int bitField0_;
     public static final int RUN_ID_FIELD_NUMBER = 1;
-    private volatile java.lang.Object runId_;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object runId_ = "";
     /**
      * <pre>
      * The ID of the MLflow Run containing the artifact that can be accessed
@@ -1394,7 +1291,8 @@ public final class DatabricksArtifacts {
     }
 
     public static final int PATH_FIELD_NUMBER = 2;
-    private volatile java.lang.Object path_;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object path_ = "";
     /**
      * <pre>
      * The path, relative to the Run's artifact root location, of the artifact
@@ -1457,7 +1355,8 @@ public final class DatabricksArtifacts {
     }
 
     public static final int SIGNED_URI_FIELD_NUMBER = 3;
-    private volatile java.lang.Object signedUri_;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object signedUri_ = "";
     /**
      * <pre>
      * The signed URI credential that provides access to the artifact
@@ -1517,6 +1416,7 @@ public final class DatabricksArtifacts {
     }
 
     public static final int HEADERS_FIELD_NUMBER = 4;
+    @SuppressWarnings("serial")
     private java.util.List<com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialInfo.HttpHeader> headers_;
     /**
      * <pre>
@@ -1582,7 +1482,7 @@ public final class DatabricksArtifacts {
     }
 
     public static final int TYPE_FIELD_NUMBER = 5;
-    private int type_;
+    private int type_ = 1;
     /**
      * <pre>
      * The type of the signed credential URI (e.g., an AWS presigned URL
@@ -1605,8 +1505,7 @@ public final class DatabricksArtifacts {
      * @return The type.
      */
     @java.lang.Override public com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialType getType() {
-      @SuppressWarnings("deprecation")
-      com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialType result = com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialType.valueOf(type_);
+      com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialType result = com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialType.forNumber(type_);
       return result == null ? com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialType.AZURE_SAS_URI : result;
     }
 
@@ -1639,7 +1538,7 @@ public final class DatabricksArtifacts {
       if (((bitField0_ & 0x00000008) != 0)) {
         output.writeEnum(5, type_);
       }
-      unknownFields.writeTo(output);
+      getUnknownFields().writeTo(output);
     }
 
     @java.lang.Override
@@ -1665,7 +1564,7 @@ public final class DatabricksArtifacts {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(5, type_);
       }
-      size += unknownFields.getSerializedSize();
+      size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -1701,7 +1600,7 @@ public final class DatabricksArtifacts {
       if (hasType()) {
         if (type_ != other.type_) return false;
       }
-      if (!unknownFields.equals(other.unknownFields)) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
 
@@ -1732,7 +1631,7 @@ public final class DatabricksArtifacts {
         hash = (37 * hash) + TYPE_FIELD_NUMBER;
         hash = (53 * hash) + type_;
       }
-      hash = (29 * hash) + unknownFields.hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -1849,37 +1748,29 @@ public final class DatabricksArtifacts {
 
       // Construct using com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialInfo.newBuilder()
       private Builder() {
-        maybeForceBuilderInitialization();
+
       }
 
       private Builder(
           com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-          getHeadersFieldBuilder();
-        }
+
       }
       @java.lang.Override
       public Builder clear() {
         super.clear();
+        bitField0_ = 0;
         runId_ = "";
-        bitField0_ = (bitField0_ & ~0x00000001);
         path_ = "";
-        bitField0_ = (bitField0_ & ~0x00000002);
         signedUri_ = "";
-        bitField0_ = (bitField0_ & ~0x00000004);
         if (headersBuilder_ == null) {
           headers_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000008);
         } else {
+          headers_ = null;
           headersBuilder_.clear();
         }
+        bitField0_ = (bitField0_ & ~0x00000008);
         type_ = 1;
-        bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
 
@@ -1906,20 +1797,13 @@ public final class DatabricksArtifacts {
       @java.lang.Override
       public com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialInfo buildPartial() {
         com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialInfo result = new com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialInfo(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) != 0)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.runId_ = runId_;
-        if (((from_bitField0_ & 0x00000002) != 0)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.path_ = path_;
-        if (((from_bitField0_ & 0x00000004) != 0)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.signedUri_ = signedUri_;
+        buildPartialRepeatedFields(result);
+        if (bitField0_ != 0) { buildPartial0(result); }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartialRepeatedFields(com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialInfo result) {
         if (headersBuilder_ == null) {
           if (((bitField0_ & 0x00000008) != 0)) {
             headers_ = java.util.Collections.unmodifiableList(headers_);
@@ -1929,13 +1813,28 @@ public final class DatabricksArtifacts {
         } else {
           result.headers_ = headersBuilder_.build();
         }
+      }
+
+      private void buildPartial0(com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialInfo result) {
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.runId_ = runId_;
+          to_bitField0_ |= 0x00000001;
+        }
+        if (((from_bitField0_ & 0x00000002) != 0)) {
+          result.path_ = path_;
+          to_bitField0_ |= 0x00000002;
+        }
+        if (((from_bitField0_ & 0x00000004) != 0)) {
+          result.signedUri_ = signedUri_;
+          to_bitField0_ |= 0x00000004;
+        }
         if (((from_bitField0_ & 0x00000010) != 0)) {
+          result.type_ = type_;
           to_bitField0_ |= 0x00000008;
         }
-        result.type_ = type_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
+        result.bitField0_ |= to_bitField0_;
       }
 
       @java.lang.Override
@@ -1983,18 +1882,18 @@ public final class DatabricksArtifacts {
       public Builder mergeFrom(com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialInfo other) {
         if (other == com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialInfo.getDefaultInstance()) return this;
         if (other.hasRunId()) {
-          bitField0_ |= 0x00000001;
           runId_ = other.runId_;
+          bitField0_ |= 0x00000001;
           onChanged();
         }
         if (other.hasPath()) {
-          bitField0_ |= 0x00000002;
           path_ = other.path_;
+          bitField0_ |= 0x00000002;
           onChanged();
         }
         if (other.hasSignedUri()) {
-          bitField0_ |= 0x00000004;
           signedUri_ = other.signedUri_;
+          bitField0_ |= 0x00000004;
           onChanged();
         }
         if (headersBuilder_ == null) {
@@ -2026,7 +1925,7 @@ public final class DatabricksArtifacts {
         if (other.hasType()) {
           setType(other.getType());
         }
-        this.mergeUnknownFields(other.unknownFields);
+        this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
       }
@@ -2041,17 +1940,70 @@ public final class DatabricksArtifacts {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialInfo parsedMessage = null;
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
         try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 10: {
+                runId_ = input.readBytes();
+                bitField0_ |= 0x00000001;
+                break;
+              } // case 10
+              case 18: {
+                path_ = input.readBytes();
+                bitField0_ |= 0x00000002;
+                break;
+              } // case 18
+              case 26: {
+                signedUri_ = input.readBytes();
+                bitField0_ |= 0x00000004;
+                break;
+              } // case 26
+              case 34: {
+                com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialInfo.HttpHeader m =
+                    input.readMessage(
+                        com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialInfo.HttpHeader.PARSER,
+                        extensionRegistry);
+                if (headersBuilder_ == null) {
+                  ensureHeadersIsMutable();
+                  headers_.add(m);
+                } else {
+                  headersBuilder_.addMessage(m);
+                }
+                break;
+              } // case 34
+              case 40: {
+                int tmpRaw = input.readEnum();
+                com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialType tmpValue =
+                    com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialType.forNumber(tmpRaw);
+                if (tmpValue == null) {
+                  mergeUnknownVarintField(5, tmpRaw);
+                } else {
+                  type_ = tmpRaw;
+                  bitField0_ |= 0x00000010;
+                }
+                break;
+              } // case 40
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialInfo) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
+          onChanged();
+        } // finally
         return this;
       }
       private int bitField0_;
@@ -2126,11 +2078,9 @@ public final class DatabricksArtifacts {
        */
       public Builder setRunId(
           java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
+        if (value == null) { throw new NullPointerException(); }
         runId_ = value;
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -2144,8 +2094,8 @@ public final class DatabricksArtifacts {
        * @return This builder for chaining.
        */
       public Builder clearRunId() {
-        bitField0_ = (bitField0_ & ~0x00000001);
         runId_ = getDefaultInstance().getRunId();
+        bitField0_ = (bitField0_ & ~0x00000001);
         onChanged();
         return this;
       }
@@ -2161,11 +2111,9 @@ public final class DatabricksArtifacts {
        */
       public Builder setRunIdBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
+        if (value == null) { throw new NullPointerException(); }
         runId_ = value;
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -2240,11 +2188,9 @@ public final class DatabricksArtifacts {
        */
       public Builder setPath(
           java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
+        if (value == null) { throw new NullPointerException(); }
         path_ = value;
+        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -2258,8 +2204,8 @@ public final class DatabricksArtifacts {
        * @return This builder for chaining.
        */
       public Builder clearPath() {
-        bitField0_ = (bitField0_ & ~0x00000002);
         path_ = getDefaultInstance().getPath();
+        bitField0_ = (bitField0_ & ~0x00000002);
         onChanged();
         return this;
       }
@@ -2275,11 +2221,9 @@ public final class DatabricksArtifacts {
        */
       public Builder setPathBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
+        if (value == null) { throw new NullPointerException(); }
         path_ = value;
+        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -2350,11 +2294,9 @@ public final class DatabricksArtifacts {
        */
       public Builder setSignedUri(
           java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
+        if (value == null) { throw new NullPointerException(); }
         signedUri_ = value;
+        bitField0_ |= 0x00000004;
         onChanged();
         return this;
       }
@@ -2367,8 +2309,8 @@ public final class DatabricksArtifacts {
        * @return This builder for chaining.
        */
       public Builder clearSignedUri() {
-        bitField0_ = (bitField0_ & ~0x00000004);
         signedUri_ = getDefaultInstance().getSignedUri();
+        bitField0_ = (bitField0_ & ~0x00000004);
         onChanged();
         return this;
       }
@@ -2383,11 +2325,9 @@ public final class DatabricksArtifacts {
        */
       public Builder setSignedUriBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
+        if (value == null) { throw new NullPointerException(); }
         signedUri_ = value;
+        bitField0_ |= 0x00000004;
         onChanged();
         return this;
       }
@@ -2746,8 +2686,7 @@ public final class DatabricksArtifacts {
        */
       @java.lang.Override
       public com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialType getType() {
-        @SuppressWarnings("deprecation")
-        com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialType result = com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialType.valueOf(type_);
+        com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialType result = com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialType.forNumber(type_);
         return result == null ? com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialType.AZURE_SAS_URI : result;
       }
       /**
@@ -2817,7 +2756,18 @@ public final class DatabricksArtifacts {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new ArtifactCredentialInfo(input, extensionRegistry);
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
       }
     };
 
@@ -2974,68 +2924,6 @@ public final class DatabricksArtifacts {
     getUnknownFields() {
       return this.unknownFields;
     }
-    private GetCredentialsForRead(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 10: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000001;
-              runId_ = bs;
-              break;
-            }
-            case 18: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              if (!((mutable_bitField0_ & 0x00000002) != 0)) {
-                path_ = new com.google.protobuf.LazyStringArrayList();
-                mutable_bitField0_ |= 0x00000002;
-              }
-              path_.add(bs);
-              break;
-            }
-            case 26: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000002;
-              pageToken_ = bs;
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000002) != 0)) {
-          path_ = path_.getUnmodifiableView();
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return com.databricks.api.proto.mlflow.DatabricksArtifacts.internal_static_mlflow_GetCredentialsForRead_descriptor;
@@ -3155,62 +3043,6 @@ public final class DatabricksArtifacts {
       getUnknownFields() {
         return this.unknownFields;
       }
-      private Response(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        this();
-        if (extensionRegistry == null) {
-          throw new java.lang.NullPointerException();
-        }
-        int mutable_bitField0_ = 0;
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-            com.google.protobuf.UnknownFieldSet.newBuilder();
-        try {
-          boolean done = false;
-          while (!done) {
-            int tag = input.readTag();
-            switch (tag) {
-              case 0:
-                done = true;
-                break;
-              case 18: {
-                if (!((mutable_bitField0_ & 0x00000001) != 0)) {
-                  credentialInfos_ = new java.util.ArrayList<com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialInfo>();
-                  mutable_bitField0_ |= 0x00000001;
-                }
-                credentialInfos_.add(
-                    input.readMessage(com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialInfo.PARSER, extensionRegistry));
-                break;
-              }
-              case 26: {
-                com.google.protobuf.ByteString bs = input.readBytes();
-                bitField0_ |= 0x00000001;
-                nextPageToken_ = bs;
-                break;
-              }
-              default: {
-                if (!parseUnknownField(
-                    input, unknownFields, extensionRegistry, tag)) {
-                  done = true;
-                }
-                break;
-              }
-            }
-          }
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          throw e.setUnfinishedMessage(this);
-        } catch (java.io.IOException e) {
-          throw new com.google.protobuf.InvalidProtocolBufferException(
-              e).setUnfinishedMessage(this);
-        } finally {
-          if (((mutable_bitField0_ & 0x00000001) != 0)) {
-            credentialInfos_ = java.util.Collections.unmodifiableList(credentialInfos_);
-          }
-          this.unknownFields = unknownFields.build();
-          makeExtensionsImmutable();
-        }
-      }
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.databricks.api.proto.mlflow.DatabricksArtifacts.internal_static_mlflow_GetCredentialsForRead_Response_descriptor;
@@ -3226,6 +3058,7 @@ public final class DatabricksArtifacts {
 
       private int bitField0_;
       public static final int CREDENTIAL_INFOS_FIELD_NUMBER = 2;
+      @SuppressWarnings("serial")
       private java.util.List<com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialInfo> credentialInfos_;
       /**
        * <pre>
@@ -3286,7 +3119,8 @@ public final class DatabricksArtifacts {
       }
 
       public static final int NEXT_PAGE_TOKEN_FIELD_NUMBER = 3;
-      private volatile java.lang.Object nextPageToken_;
+      @SuppressWarnings("serial")
+      private volatile java.lang.Object nextPageToken_ = "";
       /**
        * <pre>
        * Token used to fetch the next page of credentials for large requests that require pagination
@@ -3365,7 +3199,7 @@ public final class DatabricksArtifacts {
         if (((bitField0_ & 0x00000001) != 0)) {
           com.google.protobuf.GeneratedMessageV3.writeString(output, 3, nextPageToken_);
         }
-        unknownFields.writeTo(output);
+        getUnknownFields().writeTo(output);
       }
 
       @java.lang.Override
@@ -3381,7 +3215,7 @@ public final class DatabricksArtifacts {
         if (((bitField0_ & 0x00000001) != 0)) {
           size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, nextPageToken_);
         }
-        size += unknownFields.getSerializedSize();
+        size += getUnknownFields().getSerializedSize();
         memoizedSize = size;
         return size;
       }
@@ -3403,7 +3237,7 @@ public final class DatabricksArtifacts {
           if (!getNextPageToken()
               .equals(other.getNextPageToken())) return false;
         }
-        if (!unknownFields.equals(other.unknownFields)) return false;
+        if (!getUnknownFields().equals(other.getUnknownFields())) return false;
         return true;
       }
 
@@ -3422,7 +3256,7 @@ public final class DatabricksArtifacts {
           hash = (37 * hash) + NEXT_PAGE_TOKEN_FIELD_NUMBER;
           hash = (53 * hash) + getNextPageToken().hashCode();
         }
-        hash = (29 * hash) + unknownFields.hashCode();
+        hash = (29 * hash) + getUnknownFields().hashCode();
         memoizedHashCode = hash;
         return hash;
       }
@@ -3539,31 +3373,26 @@ public final class DatabricksArtifacts {
 
         // Construct using com.databricks.api.proto.mlflow.DatabricksArtifacts.GetCredentialsForRead.Response.newBuilder()
         private Builder() {
-          maybeForceBuilderInitialization();
+
         }
 
         private Builder(
             com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
           super(parent);
-          maybeForceBuilderInitialization();
-        }
-        private void maybeForceBuilderInitialization() {
-          if (com.google.protobuf.GeneratedMessageV3
-                  .alwaysUseFieldBuilders) {
-            getCredentialInfosFieldBuilder();
-          }
+
         }
         @java.lang.Override
         public Builder clear() {
           super.clear();
+          bitField0_ = 0;
           if (credentialInfosBuilder_ == null) {
             credentialInfos_ = java.util.Collections.emptyList();
-            bitField0_ = (bitField0_ & ~0x00000001);
           } else {
+            credentialInfos_ = null;
             credentialInfosBuilder_.clear();
           }
+          bitField0_ = (bitField0_ & ~0x00000001);
           nextPageToken_ = "";
-          bitField0_ = (bitField0_ & ~0x00000002);
           return this;
         }
 
@@ -3590,8 +3419,13 @@ public final class DatabricksArtifacts {
         @java.lang.Override
         public com.databricks.api.proto.mlflow.DatabricksArtifacts.GetCredentialsForRead.Response buildPartial() {
           com.databricks.api.proto.mlflow.DatabricksArtifacts.GetCredentialsForRead.Response result = new com.databricks.api.proto.mlflow.DatabricksArtifacts.GetCredentialsForRead.Response(this);
-          int from_bitField0_ = bitField0_;
-          int to_bitField0_ = 0;
+          buildPartialRepeatedFields(result);
+          if (bitField0_ != 0) { buildPartial0(result); }
+          onBuilt();
+          return result;
+        }
+
+        private void buildPartialRepeatedFields(com.databricks.api.proto.mlflow.DatabricksArtifacts.GetCredentialsForRead.Response result) {
           if (credentialInfosBuilder_ == null) {
             if (((bitField0_ & 0x00000001) != 0)) {
               credentialInfos_ = java.util.Collections.unmodifiableList(credentialInfos_);
@@ -3601,13 +3435,16 @@ public final class DatabricksArtifacts {
           } else {
             result.credentialInfos_ = credentialInfosBuilder_.build();
           }
+        }
+
+        private void buildPartial0(com.databricks.api.proto.mlflow.DatabricksArtifacts.GetCredentialsForRead.Response result) {
+          int from_bitField0_ = bitField0_;
+          int to_bitField0_ = 0;
           if (((from_bitField0_ & 0x00000002) != 0)) {
+            result.nextPageToken_ = nextPageToken_;
             to_bitField0_ |= 0x00000001;
           }
-          result.nextPageToken_ = nextPageToken_;
-          result.bitField0_ = to_bitField0_;
-          onBuilt();
-          return result;
+          result.bitField0_ |= to_bitField0_;
         }
 
         @java.lang.Override
@@ -3681,11 +3518,11 @@ public final class DatabricksArtifacts {
             }
           }
           if (other.hasNextPageToken()) {
-            bitField0_ |= 0x00000002;
             nextPageToken_ = other.nextPageToken_;
+            bitField0_ |= 0x00000002;
             onChanged();
           }
-          this.mergeUnknownFields(other.unknownFields);
+          this.mergeUnknownFields(other.getUnknownFields());
           onChanged();
           return this;
         }
@@ -3700,17 +3537,48 @@ public final class DatabricksArtifacts {
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
-          com.databricks.api.proto.mlflow.DatabricksArtifacts.GetCredentialsForRead.Response parsedMessage = null;
+          if (extensionRegistry == null) {
+            throw new java.lang.NullPointerException();
+          }
           try {
-            parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+            boolean done = false;
+            while (!done) {
+              int tag = input.readTag();
+              switch (tag) {
+                case 0:
+                  done = true;
+                  break;
+                case 18: {
+                  com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialInfo m =
+                      input.readMessage(
+                          com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialInfo.PARSER,
+                          extensionRegistry);
+                  if (credentialInfosBuilder_ == null) {
+                    ensureCredentialInfosIsMutable();
+                    credentialInfos_.add(m);
+                  } else {
+                    credentialInfosBuilder_.addMessage(m);
+                  }
+                  break;
+                } // case 18
+                case 26: {
+                  nextPageToken_ = input.readBytes();
+                  bitField0_ |= 0x00000002;
+                  break;
+                } // case 26
+                default: {
+                  if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                    done = true; // was an endgroup tag
+                  }
+                  break;
+                } // default:
+              } // switch (tag)
+            } // while (!done)
           } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-            parsedMessage = (com.databricks.api.proto.mlflow.DatabricksArtifacts.GetCredentialsForRead.Response) e.getUnfinishedMessage();
             throw e.unwrapIOException();
           } finally {
-            if (parsedMessage != null) {
-              mergeFrom(parsedMessage);
-            }
-          }
+            onChanged();
+          } // finally
           return this;
         }
         private int bitField0_;
@@ -4093,11 +3961,9 @@ public final class DatabricksArtifacts {
          */
         public Builder setNextPageToken(
             java.lang.String value) {
-          if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
+          if (value == null) { throw new NullPointerException(); }
           nextPageToken_ = value;
+          bitField0_ |= 0x00000002;
           onChanged();
           return this;
         }
@@ -4110,8 +3976,8 @@ public final class DatabricksArtifacts {
          * @return This builder for chaining.
          */
         public Builder clearNextPageToken() {
-          bitField0_ = (bitField0_ & ~0x00000002);
           nextPageToken_ = getDefaultInstance().getNextPageToken();
+          bitField0_ = (bitField0_ & ~0x00000002);
           onChanged();
           return this;
         }
@@ -4126,11 +3992,9 @@ public final class DatabricksArtifacts {
          */
         public Builder setNextPageTokenBytes(
             com.google.protobuf.ByteString value) {
-          if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
+          if (value == null) { throw new NullPointerException(); }
           nextPageToken_ = value;
+          bitField0_ |= 0x00000002;
           onChanged();
           return this;
         }
@@ -4167,7 +4031,18 @@ public final class DatabricksArtifacts {
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
-          return new Response(input, extensionRegistry);
+          Builder builder = newBuilder();
+          try {
+            builder.mergeFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            throw e.setUnfinishedMessage(builder.buildPartial());
+          } catch (com.google.protobuf.UninitializedMessageException e) {
+            throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+          } catch (java.io.IOException e) {
+            throw new com.google.protobuf.InvalidProtocolBufferException(e)
+                .setUnfinishedMessage(builder.buildPartial());
+          }
+          return builder.buildPartial();
         }
       };
 
@@ -4189,7 +4064,8 @@ public final class DatabricksArtifacts {
 
     private int bitField0_;
     public static final int RUN_ID_FIELD_NUMBER = 1;
-    private volatile java.lang.Object runId_;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object runId_ = "";
     /**
      * <pre>
      * The ID of the MLflow Run for which to fetch artifact read credentials
@@ -4249,6 +4125,7 @@ public final class DatabricksArtifacts {
     }
 
     public static final int PATH_FIELD_NUMBER = 2;
+    @SuppressWarnings("serial")
     private com.google.protobuf.LazyStringList path_;
     /**
      * <pre>
@@ -4304,7 +4181,8 @@ public final class DatabricksArtifacts {
     }
 
     public static final int PAGE_TOKEN_FIELD_NUMBER = 3;
-    private volatile java.lang.Object pageToken_;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object pageToken_ = "";
     /**
      * <pre>
      * Token specifying the page of credentials to fetch for large requests that require pagination
@@ -4386,7 +4264,7 @@ public final class DatabricksArtifacts {
       if (((bitField0_ & 0x00000002) != 0)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 3, pageToken_);
       }
-      unknownFields.writeTo(output);
+      getUnknownFields().writeTo(output);
     }
 
     @java.lang.Override
@@ -4409,7 +4287,7 @@ public final class DatabricksArtifacts {
       if (((bitField0_ & 0x00000002) != 0)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, pageToken_);
       }
-      size += unknownFields.getSerializedSize();
+      size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -4436,7 +4314,7 @@ public final class DatabricksArtifacts {
         if (!getPageToken()
             .equals(other.getPageToken())) return false;
       }
-      if (!unknownFields.equals(other.unknownFields)) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
 
@@ -4459,7 +4337,7 @@ public final class DatabricksArtifacts {
         hash = (37 * hash) + PAGE_TOKEN_FIELD_NUMBER;
         hash = (53 * hash) + getPageToken().hashCode();
       }
-      hash = (29 * hash) + unknownFields.hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -4576,28 +4454,22 @@ public final class DatabricksArtifacts {
 
       // Construct using com.databricks.api.proto.mlflow.DatabricksArtifacts.GetCredentialsForRead.newBuilder()
       private Builder() {
-        maybeForceBuilderInitialization();
+
       }
 
       private Builder(
           com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
+
       }
       @java.lang.Override
       public Builder clear() {
         super.clear();
+        bitField0_ = 0;
         runId_ = "";
-        bitField0_ = (bitField0_ & ~0x00000001);
         path_ = com.google.protobuf.LazyStringArrayList.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000002);
         pageToken_ = "";
-        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
 
@@ -4624,24 +4496,32 @@ public final class DatabricksArtifacts {
       @java.lang.Override
       public com.databricks.api.proto.mlflow.DatabricksArtifacts.GetCredentialsForRead buildPartial() {
         com.databricks.api.proto.mlflow.DatabricksArtifacts.GetCredentialsForRead result = new com.databricks.api.proto.mlflow.DatabricksArtifacts.GetCredentialsForRead(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) != 0)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.runId_ = runId_;
+        buildPartialRepeatedFields(result);
+        if (bitField0_ != 0) { buildPartial0(result); }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartialRepeatedFields(com.databricks.api.proto.mlflow.DatabricksArtifacts.GetCredentialsForRead result) {
         if (((bitField0_ & 0x00000002) != 0)) {
           path_ = path_.getUnmodifiableView();
           bitField0_ = (bitField0_ & ~0x00000002);
         }
         result.path_ = path_;
+      }
+
+      private void buildPartial0(com.databricks.api.proto.mlflow.DatabricksArtifacts.GetCredentialsForRead result) {
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.runId_ = runId_;
+          to_bitField0_ |= 0x00000001;
+        }
         if (((from_bitField0_ & 0x00000004) != 0)) {
+          result.pageToken_ = pageToken_;
           to_bitField0_ |= 0x00000002;
         }
-        result.pageToken_ = pageToken_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
+        result.bitField0_ |= to_bitField0_;
       }
 
       @java.lang.Override
@@ -4689,8 +4569,8 @@ public final class DatabricksArtifacts {
       public Builder mergeFrom(com.databricks.api.proto.mlflow.DatabricksArtifacts.GetCredentialsForRead other) {
         if (other == com.databricks.api.proto.mlflow.DatabricksArtifacts.GetCredentialsForRead.getDefaultInstance()) return this;
         if (other.hasRunId()) {
-          bitField0_ |= 0x00000001;
           runId_ = other.runId_;
+          bitField0_ |= 0x00000001;
           onChanged();
         }
         if (!other.path_.isEmpty()) {
@@ -4704,11 +4584,11 @@ public final class DatabricksArtifacts {
           onChanged();
         }
         if (other.hasPageToken()) {
-          bitField0_ |= 0x00000004;
           pageToken_ = other.pageToken_;
+          bitField0_ |= 0x00000004;
           onChanged();
         }
-        this.mergeUnknownFields(other.unknownFields);
+        this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
       }
@@ -4723,17 +4603,46 @@ public final class DatabricksArtifacts {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.databricks.api.proto.mlflow.DatabricksArtifacts.GetCredentialsForRead parsedMessage = null;
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
         try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 10: {
+                runId_ = input.readBytes();
+                bitField0_ |= 0x00000001;
+                break;
+              } // case 10
+              case 18: {
+                com.google.protobuf.ByteString bs = input.readBytes();
+                ensurePathIsMutable();
+                path_.add(bs);
+                break;
+              } // case 18
+              case 26: {
+                pageToken_ = input.readBytes();
+                bitField0_ |= 0x00000004;
+                break;
+              } // case 26
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.databricks.api.proto.mlflow.DatabricksArtifacts.GetCredentialsForRead) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
+          onChanged();
+        } // finally
         return this;
       }
       private int bitField0_;
@@ -4804,11 +4713,9 @@ public final class DatabricksArtifacts {
        */
       public Builder setRunId(
           java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
+        if (value == null) { throw new NullPointerException(); }
         runId_ = value;
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -4821,8 +4728,8 @@ public final class DatabricksArtifacts {
        * @return This builder for chaining.
        */
       public Builder clearRunId() {
-        bitField0_ = (bitField0_ & ~0x00000001);
         runId_ = getDefaultInstance().getRunId();
+        bitField0_ = (bitField0_ & ~0x00000001);
         onChanged();
         return this;
       }
@@ -4837,11 +4744,9 @@ public final class DatabricksArtifacts {
        */
       public Builder setRunIdBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
+        if (value == null) { throw new NullPointerException(); }
         runId_ = value;
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -4918,10 +4823,8 @@ public final class DatabricksArtifacts {
        */
       public Builder setPath(
           int index, java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensurePathIsMutable();
+        if (value == null) { throw new NullPointerException(); }
+        ensurePathIsMutable();
         path_.set(index, value);
         onChanged();
         return this;
@@ -4938,10 +4841,8 @@ public final class DatabricksArtifacts {
        */
       public Builder addPath(
           java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensurePathIsMutable();
+        if (value == null) { throw new NullPointerException(); }
+        ensurePathIsMutable();
         path_.add(value);
         onChanged();
         return this;
@@ -4991,10 +4892,8 @@ public final class DatabricksArtifacts {
        */
       public Builder addPathBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensurePathIsMutable();
+        if (value == null) { throw new NullPointerException(); }
+        ensurePathIsMutable();
         path_.add(value);
         onChanged();
         return this;
@@ -5066,11 +4965,9 @@ public final class DatabricksArtifacts {
        */
       public Builder setPageToken(
           java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
+        if (value == null) { throw new NullPointerException(); }
         pageToken_ = value;
+        bitField0_ |= 0x00000004;
         onChanged();
         return this;
       }
@@ -5083,8 +4980,8 @@ public final class DatabricksArtifacts {
        * @return This builder for chaining.
        */
       public Builder clearPageToken() {
-        bitField0_ = (bitField0_ & ~0x00000004);
         pageToken_ = getDefaultInstance().getPageToken();
+        bitField0_ = (bitField0_ & ~0x00000004);
         onChanged();
         return this;
       }
@@ -5099,11 +4996,9 @@ public final class DatabricksArtifacts {
        */
       public Builder setPageTokenBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
+        if (value == null) { throw new NullPointerException(); }
         pageToken_ = value;
+        bitField0_ |= 0x00000004;
         onChanged();
         return this;
       }
@@ -5140,7 +5035,18 @@ public final class DatabricksArtifacts {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new GetCredentialsForRead(input, extensionRegistry);
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
       }
     };
 
@@ -5297,68 +5203,6 @@ public final class DatabricksArtifacts {
     getUnknownFields() {
       return this.unknownFields;
     }
-    private GetCredentialsForWrite(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 10: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000001;
-              runId_ = bs;
-              break;
-            }
-            case 18: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              if (!((mutable_bitField0_ & 0x00000002) != 0)) {
-                path_ = new com.google.protobuf.LazyStringArrayList();
-                mutable_bitField0_ |= 0x00000002;
-              }
-              path_.add(bs);
-              break;
-            }
-            case 26: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000002;
-              pageToken_ = bs;
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000002) != 0)) {
-          path_ = path_.getUnmodifiableView();
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return com.databricks.api.proto.mlflow.DatabricksArtifacts.internal_static_mlflow_GetCredentialsForWrite_descriptor;
@@ -5478,62 +5322,6 @@ public final class DatabricksArtifacts {
       getUnknownFields() {
         return this.unknownFields;
       }
-      private Response(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        this();
-        if (extensionRegistry == null) {
-          throw new java.lang.NullPointerException();
-        }
-        int mutable_bitField0_ = 0;
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-            com.google.protobuf.UnknownFieldSet.newBuilder();
-        try {
-          boolean done = false;
-          while (!done) {
-            int tag = input.readTag();
-            switch (tag) {
-              case 0:
-                done = true;
-                break;
-              case 18: {
-                if (!((mutable_bitField0_ & 0x00000001) != 0)) {
-                  credentialInfos_ = new java.util.ArrayList<com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialInfo>();
-                  mutable_bitField0_ |= 0x00000001;
-                }
-                credentialInfos_.add(
-                    input.readMessage(com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialInfo.PARSER, extensionRegistry));
-                break;
-              }
-              case 26: {
-                com.google.protobuf.ByteString bs = input.readBytes();
-                bitField0_ |= 0x00000001;
-                nextPageToken_ = bs;
-                break;
-              }
-              default: {
-                if (!parseUnknownField(
-                    input, unknownFields, extensionRegistry, tag)) {
-                  done = true;
-                }
-                break;
-              }
-            }
-          }
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          throw e.setUnfinishedMessage(this);
-        } catch (java.io.IOException e) {
-          throw new com.google.protobuf.InvalidProtocolBufferException(
-              e).setUnfinishedMessage(this);
-        } finally {
-          if (((mutable_bitField0_ & 0x00000001) != 0)) {
-            credentialInfos_ = java.util.Collections.unmodifiableList(credentialInfos_);
-          }
-          this.unknownFields = unknownFields.build();
-          makeExtensionsImmutable();
-        }
-      }
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.databricks.api.proto.mlflow.DatabricksArtifacts.internal_static_mlflow_GetCredentialsForWrite_Response_descriptor;
@@ -5549,6 +5337,7 @@ public final class DatabricksArtifacts {
 
       private int bitField0_;
       public static final int CREDENTIAL_INFOS_FIELD_NUMBER = 2;
+      @SuppressWarnings("serial")
       private java.util.List<com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialInfo> credentialInfos_;
       /**
        * <pre>
@@ -5609,7 +5398,8 @@ public final class DatabricksArtifacts {
       }
 
       public static final int NEXT_PAGE_TOKEN_FIELD_NUMBER = 3;
-      private volatile java.lang.Object nextPageToken_;
+      @SuppressWarnings("serial")
+      private volatile java.lang.Object nextPageToken_ = "";
       /**
        * <pre>
        * Token used to fetch the next page of credentials for large requests that require pagination
@@ -5688,7 +5478,7 @@ public final class DatabricksArtifacts {
         if (((bitField0_ & 0x00000001) != 0)) {
           com.google.protobuf.GeneratedMessageV3.writeString(output, 3, nextPageToken_);
         }
-        unknownFields.writeTo(output);
+        getUnknownFields().writeTo(output);
       }
 
       @java.lang.Override
@@ -5704,7 +5494,7 @@ public final class DatabricksArtifacts {
         if (((bitField0_ & 0x00000001) != 0)) {
           size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, nextPageToken_);
         }
-        size += unknownFields.getSerializedSize();
+        size += getUnknownFields().getSerializedSize();
         memoizedSize = size;
         return size;
       }
@@ -5726,7 +5516,7 @@ public final class DatabricksArtifacts {
           if (!getNextPageToken()
               .equals(other.getNextPageToken())) return false;
         }
-        if (!unknownFields.equals(other.unknownFields)) return false;
+        if (!getUnknownFields().equals(other.getUnknownFields())) return false;
         return true;
       }
 
@@ -5745,7 +5535,7 @@ public final class DatabricksArtifacts {
           hash = (37 * hash) + NEXT_PAGE_TOKEN_FIELD_NUMBER;
           hash = (53 * hash) + getNextPageToken().hashCode();
         }
-        hash = (29 * hash) + unknownFields.hashCode();
+        hash = (29 * hash) + getUnknownFields().hashCode();
         memoizedHashCode = hash;
         return hash;
       }
@@ -5862,31 +5652,26 @@ public final class DatabricksArtifacts {
 
         // Construct using com.databricks.api.proto.mlflow.DatabricksArtifacts.GetCredentialsForWrite.Response.newBuilder()
         private Builder() {
-          maybeForceBuilderInitialization();
+
         }
 
         private Builder(
             com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
           super(parent);
-          maybeForceBuilderInitialization();
-        }
-        private void maybeForceBuilderInitialization() {
-          if (com.google.protobuf.GeneratedMessageV3
-                  .alwaysUseFieldBuilders) {
-            getCredentialInfosFieldBuilder();
-          }
+
         }
         @java.lang.Override
         public Builder clear() {
           super.clear();
+          bitField0_ = 0;
           if (credentialInfosBuilder_ == null) {
             credentialInfos_ = java.util.Collections.emptyList();
-            bitField0_ = (bitField0_ & ~0x00000001);
           } else {
+            credentialInfos_ = null;
             credentialInfosBuilder_.clear();
           }
+          bitField0_ = (bitField0_ & ~0x00000001);
           nextPageToken_ = "";
-          bitField0_ = (bitField0_ & ~0x00000002);
           return this;
         }
 
@@ -5913,8 +5698,13 @@ public final class DatabricksArtifacts {
         @java.lang.Override
         public com.databricks.api.proto.mlflow.DatabricksArtifacts.GetCredentialsForWrite.Response buildPartial() {
           com.databricks.api.proto.mlflow.DatabricksArtifacts.GetCredentialsForWrite.Response result = new com.databricks.api.proto.mlflow.DatabricksArtifacts.GetCredentialsForWrite.Response(this);
-          int from_bitField0_ = bitField0_;
-          int to_bitField0_ = 0;
+          buildPartialRepeatedFields(result);
+          if (bitField0_ != 0) { buildPartial0(result); }
+          onBuilt();
+          return result;
+        }
+
+        private void buildPartialRepeatedFields(com.databricks.api.proto.mlflow.DatabricksArtifacts.GetCredentialsForWrite.Response result) {
           if (credentialInfosBuilder_ == null) {
             if (((bitField0_ & 0x00000001) != 0)) {
               credentialInfos_ = java.util.Collections.unmodifiableList(credentialInfos_);
@@ -5924,13 +5714,16 @@ public final class DatabricksArtifacts {
           } else {
             result.credentialInfos_ = credentialInfosBuilder_.build();
           }
+        }
+
+        private void buildPartial0(com.databricks.api.proto.mlflow.DatabricksArtifacts.GetCredentialsForWrite.Response result) {
+          int from_bitField0_ = bitField0_;
+          int to_bitField0_ = 0;
           if (((from_bitField0_ & 0x00000002) != 0)) {
+            result.nextPageToken_ = nextPageToken_;
             to_bitField0_ |= 0x00000001;
           }
-          result.nextPageToken_ = nextPageToken_;
-          result.bitField0_ = to_bitField0_;
-          onBuilt();
-          return result;
+          result.bitField0_ |= to_bitField0_;
         }
 
         @java.lang.Override
@@ -6004,11 +5797,11 @@ public final class DatabricksArtifacts {
             }
           }
           if (other.hasNextPageToken()) {
-            bitField0_ |= 0x00000002;
             nextPageToken_ = other.nextPageToken_;
+            bitField0_ |= 0x00000002;
             onChanged();
           }
-          this.mergeUnknownFields(other.unknownFields);
+          this.mergeUnknownFields(other.getUnknownFields());
           onChanged();
           return this;
         }
@@ -6023,17 +5816,48 @@ public final class DatabricksArtifacts {
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
-          com.databricks.api.proto.mlflow.DatabricksArtifacts.GetCredentialsForWrite.Response parsedMessage = null;
+          if (extensionRegistry == null) {
+            throw new java.lang.NullPointerException();
+          }
           try {
-            parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+            boolean done = false;
+            while (!done) {
+              int tag = input.readTag();
+              switch (tag) {
+                case 0:
+                  done = true;
+                  break;
+                case 18: {
+                  com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialInfo m =
+                      input.readMessage(
+                          com.databricks.api.proto.mlflow.DatabricksArtifacts.ArtifactCredentialInfo.PARSER,
+                          extensionRegistry);
+                  if (credentialInfosBuilder_ == null) {
+                    ensureCredentialInfosIsMutable();
+                    credentialInfos_.add(m);
+                  } else {
+                    credentialInfosBuilder_.addMessage(m);
+                  }
+                  break;
+                } // case 18
+                case 26: {
+                  nextPageToken_ = input.readBytes();
+                  bitField0_ |= 0x00000002;
+                  break;
+                } // case 26
+                default: {
+                  if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                    done = true; // was an endgroup tag
+                  }
+                  break;
+                } // default:
+              } // switch (tag)
+            } // while (!done)
           } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-            parsedMessage = (com.databricks.api.proto.mlflow.DatabricksArtifacts.GetCredentialsForWrite.Response) e.getUnfinishedMessage();
             throw e.unwrapIOException();
           } finally {
-            if (parsedMessage != null) {
-              mergeFrom(parsedMessage);
-            }
-          }
+            onChanged();
+          } // finally
           return this;
         }
         private int bitField0_;
@@ -6416,11 +6240,9 @@ public final class DatabricksArtifacts {
          */
         public Builder setNextPageToken(
             java.lang.String value) {
-          if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
+          if (value == null) { throw new NullPointerException(); }
           nextPageToken_ = value;
+          bitField0_ |= 0x00000002;
           onChanged();
           return this;
         }
@@ -6433,8 +6255,8 @@ public final class DatabricksArtifacts {
          * @return This builder for chaining.
          */
         public Builder clearNextPageToken() {
-          bitField0_ = (bitField0_ & ~0x00000002);
           nextPageToken_ = getDefaultInstance().getNextPageToken();
+          bitField0_ = (bitField0_ & ~0x00000002);
           onChanged();
           return this;
         }
@@ -6449,11 +6271,9 @@ public final class DatabricksArtifacts {
          */
         public Builder setNextPageTokenBytes(
             com.google.protobuf.ByteString value) {
-          if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
+          if (value == null) { throw new NullPointerException(); }
           nextPageToken_ = value;
+          bitField0_ |= 0x00000002;
           onChanged();
           return this;
         }
@@ -6490,7 +6310,18 @@ public final class DatabricksArtifacts {
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
-          return new Response(input, extensionRegistry);
+          Builder builder = newBuilder();
+          try {
+            builder.mergeFrom(input, extensionRegistry);
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            throw e.setUnfinishedMessage(builder.buildPartial());
+          } catch (com.google.protobuf.UninitializedMessageException e) {
+            throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+          } catch (java.io.IOException e) {
+            throw new com.google.protobuf.InvalidProtocolBufferException(e)
+                .setUnfinishedMessage(builder.buildPartial());
+          }
+          return builder.buildPartial();
         }
       };
 
@@ -6512,7 +6343,8 @@ public final class DatabricksArtifacts {
 
     private int bitField0_;
     public static final int RUN_ID_FIELD_NUMBER = 1;
-    private volatile java.lang.Object runId_;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object runId_ = "";
     /**
      * <pre>
      * The ID of the MLflow Run for which to fetch artifact write credentials
@@ -6572,6 +6404,7 @@ public final class DatabricksArtifacts {
     }
 
     public static final int PATH_FIELD_NUMBER = 2;
+    @SuppressWarnings("serial")
     private com.google.protobuf.LazyStringList path_;
     /**
      * <pre>
@@ -6627,7 +6460,8 @@ public final class DatabricksArtifacts {
     }
 
     public static final int PAGE_TOKEN_FIELD_NUMBER = 3;
-    private volatile java.lang.Object pageToken_;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object pageToken_ = "";
     /**
      * <pre>
      * Token specifying the page of credentials to fetch for large requests that require pagination
@@ -6709,7 +6543,7 @@ public final class DatabricksArtifacts {
       if (((bitField0_ & 0x00000002) != 0)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 3, pageToken_);
       }
-      unknownFields.writeTo(output);
+      getUnknownFields().writeTo(output);
     }
 
     @java.lang.Override
@@ -6732,7 +6566,7 @@ public final class DatabricksArtifacts {
       if (((bitField0_ & 0x00000002) != 0)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, pageToken_);
       }
-      size += unknownFields.getSerializedSize();
+      size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -6759,7 +6593,7 @@ public final class DatabricksArtifacts {
         if (!getPageToken()
             .equals(other.getPageToken())) return false;
       }
-      if (!unknownFields.equals(other.unknownFields)) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
 
@@ -6782,7 +6616,7 @@ public final class DatabricksArtifacts {
         hash = (37 * hash) + PAGE_TOKEN_FIELD_NUMBER;
         hash = (53 * hash) + getPageToken().hashCode();
       }
-      hash = (29 * hash) + unknownFields.hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -6899,28 +6733,22 @@ public final class DatabricksArtifacts {
 
       // Construct using com.databricks.api.proto.mlflow.DatabricksArtifacts.GetCredentialsForWrite.newBuilder()
       private Builder() {
-        maybeForceBuilderInitialization();
+
       }
 
       private Builder(
           com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
+
       }
       @java.lang.Override
       public Builder clear() {
         super.clear();
+        bitField0_ = 0;
         runId_ = "";
-        bitField0_ = (bitField0_ & ~0x00000001);
         path_ = com.google.protobuf.LazyStringArrayList.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000002);
         pageToken_ = "";
-        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
 
@@ -6947,24 +6775,32 @@ public final class DatabricksArtifacts {
       @java.lang.Override
       public com.databricks.api.proto.mlflow.DatabricksArtifacts.GetCredentialsForWrite buildPartial() {
         com.databricks.api.proto.mlflow.DatabricksArtifacts.GetCredentialsForWrite result = new com.databricks.api.proto.mlflow.DatabricksArtifacts.GetCredentialsForWrite(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) != 0)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.runId_ = runId_;
+        buildPartialRepeatedFields(result);
+        if (bitField0_ != 0) { buildPartial0(result); }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartialRepeatedFields(com.databricks.api.proto.mlflow.DatabricksArtifacts.GetCredentialsForWrite result) {
         if (((bitField0_ & 0x00000002) != 0)) {
           path_ = path_.getUnmodifiableView();
           bitField0_ = (bitField0_ & ~0x00000002);
         }
         result.path_ = path_;
+      }
+
+      private void buildPartial0(com.databricks.api.proto.mlflow.DatabricksArtifacts.GetCredentialsForWrite result) {
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.runId_ = runId_;
+          to_bitField0_ |= 0x00000001;
+        }
         if (((from_bitField0_ & 0x00000004) != 0)) {
+          result.pageToken_ = pageToken_;
           to_bitField0_ |= 0x00000002;
         }
-        result.pageToken_ = pageToken_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
+        result.bitField0_ |= to_bitField0_;
       }
 
       @java.lang.Override
@@ -7012,8 +6848,8 @@ public final class DatabricksArtifacts {
       public Builder mergeFrom(com.databricks.api.proto.mlflow.DatabricksArtifacts.GetCredentialsForWrite other) {
         if (other == com.databricks.api.proto.mlflow.DatabricksArtifacts.GetCredentialsForWrite.getDefaultInstance()) return this;
         if (other.hasRunId()) {
-          bitField0_ |= 0x00000001;
           runId_ = other.runId_;
+          bitField0_ |= 0x00000001;
           onChanged();
         }
         if (!other.path_.isEmpty()) {
@@ -7027,11 +6863,11 @@ public final class DatabricksArtifacts {
           onChanged();
         }
         if (other.hasPageToken()) {
-          bitField0_ |= 0x00000004;
           pageToken_ = other.pageToken_;
+          bitField0_ |= 0x00000004;
           onChanged();
         }
-        this.mergeUnknownFields(other.unknownFields);
+        this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
       }
@@ -7046,17 +6882,46 @@ public final class DatabricksArtifacts {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.databricks.api.proto.mlflow.DatabricksArtifacts.GetCredentialsForWrite parsedMessage = null;
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
         try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 10: {
+                runId_ = input.readBytes();
+                bitField0_ |= 0x00000001;
+                break;
+              } // case 10
+              case 18: {
+                com.google.protobuf.ByteString bs = input.readBytes();
+                ensurePathIsMutable();
+                path_.add(bs);
+                break;
+              } // case 18
+              case 26: {
+                pageToken_ = input.readBytes();
+                bitField0_ |= 0x00000004;
+                break;
+              } // case 26
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.databricks.api.proto.mlflow.DatabricksArtifacts.GetCredentialsForWrite) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
+          onChanged();
+        } // finally
         return this;
       }
       private int bitField0_;
@@ -7127,11 +6992,9 @@ public final class DatabricksArtifacts {
        */
       public Builder setRunId(
           java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
+        if (value == null) { throw new NullPointerException(); }
         runId_ = value;
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -7144,8 +7007,8 @@ public final class DatabricksArtifacts {
        * @return This builder for chaining.
        */
       public Builder clearRunId() {
-        bitField0_ = (bitField0_ & ~0x00000001);
         runId_ = getDefaultInstance().getRunId();
+        bitField0_ = (bitField0_ & ~0x00000001);
         onChanged();
         return this;
       }
@@ -7160,11 +7023,9 @@ public final class DatabricksArtifacts {
        */
       public Builder setRunIdBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
+        if (value == null) { throw new NullPointerException(); }
         runId_ = value;
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -7241,10 +7102,8 @@ public final class DatabricksArtifacts {
        */
       public Builder setPath(
           int index, java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensurePathIsMutable();
+        if (value == null) { throw new NullPointerException(); }
+        ensurePathIsMutable();
         path_.set(index, value);
         onChanged();
         return this;
@@ -7261,10 +7120,8 @@ public final class DatabricksArtifacts {
        */
       public Builder addPath(
           java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensurePathIsMutable();
+        if (value == null) { throw new NullPointerException(); }
+        ensurePathIsMutable();
         path_.add(value);
         onChanged();
         return this;
@@ -7314,10 +7171,8 @@ public final class DatabricksArtifacts {
        */
       public Builder addPathBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensurePathIsMutable();
+        if (value == null) { throw new NullPointerException(); }
+        ensurePathIsMutable();
         path_.add(value);
         onChanged();
         return this;
@@ -7389,11 +7244,9 @@ public final class DatabricksArtifacts {
        */
       public Builder setPageToken(
           java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
+        if (value == null) { throw new NullPointerException(); }
         pageToken_ = value;
+        bitField0_ |= 0x00000004;
         onChanged();
         return this;
       }
@@ -7406,8 +7259,8 @@ public final class DatabricksArtifacts {
        * @return This builder for chaining.
        */
       public Builder clearPageToken() {
-        bitField0_ = (bitField0_ & ~0x00000004);
         pageToken_ = getDefaultInstance().getPageToken();
+        bitField0_ = (bitField0_ & ~0x00000004);
         onChanged();
         return this;
       }
@@ -7422,11 +7275,9 @@ public final class DatabricksArtifacts {
        */
       public Builder setPageTokenBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
+        if (value == null) { throw new NullPointerException(); }
         pageToken_ = value;
+        bitField0_ |= 0x00000004;
         onChanged();
         return this;
       }
@@ -7463,7 +7314,18 @@ public final class DatabricksArtifacts {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new GetCredentialsForWrite(input, extensionRegistry);
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
       }
     };
 
