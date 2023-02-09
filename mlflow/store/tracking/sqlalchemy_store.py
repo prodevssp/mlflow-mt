@@ -151,9 +151,9 @@ class SqlAlchemyStore(AbstractStore):
         if is_local_uri(default_artifact_root):
             mkdir(local_file_uri_to_path(default_artifact_root))
 
-        if len(self.list_experiments(view_type=ViewType.ALL)) == 0:
-            with self.ManagedSessionMaker() as session:
-                self._create_default_experiment(session)
+        # if len(self.list_experiments(view_type=ViewType.ALL)) == 0:
+        #     with self.ManagedSessionMaker() as session:
+        #         self._create_default_experiment(session)
 
     def _get_dialect(self):
         return self.engine.dialect.name
@@ -326,10 +326,16 @@ class SqlAlchemyStore(AbstractStore):
                 )
 
             experiments = [exp.to_mlflow_entity() for exp in queried_experiments]
+            user_teams = get_authorised_teams_from_token(os.getenv('JWT_AUTH_TOKEN'))
+            all_team_experiments = session.query(SqlTeamExperimentDetails).filter(
+                SqlTeamExperimentDetails.team_id.in_(user_teams)).all()
+            team_experiment_list = [int(data.experiment_id) for data in all_team_experiments]
+            filtered_experiments = [experiment for experiment in experiments if
+                                    int(experiment.experiment_id) in team_experiment_list]
         if max_results is not None:
-            return PagedList(experiments[:max_results], compute_next_token(len(experiments)))
+            return PagedList(filtered_experiments[:max_results], compute_next_token(len(filtered_experiments)))
         else:
-            return PagedList(experiments, None)
+            return PagedList(filtered_experiments, None)
 
     def list_experiments(
         self,
