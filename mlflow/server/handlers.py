@@ -78,6 +78,7 @@ from mlflow.store.artifact.artifact_repository_registry import get_artifact_repo
 from mlflow.store.db.db_types import DATABASE_ENGINES
 from mlflow.tracking._model_registry.registry import ModelRegistryStoreRegistry
 from mlflow.tracking._tracking_service.registry import TrackingStoreRegistry
+from mlflow.utils.auth_utils import get_authorised_teams_from_token
 from mlflow.utils.proto_json_utils import message_to_json, parse_dict
 from mlflow.utils.validation import _validate_batch_log_api_req
 from mlflow.utils.string_utils import is_string_type
@@ -552,6 +553,9 @@ def _create_experiment():
     )
 
     tags = [ExperimentTag(tag.key, tag.value) for tag in request_message.tags]
+    os.environ['JWT_AUTH_TOKEN'] = request.headers.get('Jwt-Auth-Token')
+    if request_message.team_id not in get_authorised_teams_from_token(os.environ.get('JWT_AUTH_TOKEN')):
+        raise MlflowException('Team {} not authorised to perform create operation'.format(request_message.team_id), INVALID_PARAMETER_VALUE)
     experiment_id = _get_tracking_store().create_experiment(
         request_message.name, request_message.artifact_location, tags, request_message.team_id
     )
@@ -569,6 +573,7 @@ def _get_experiment():
         GetExperiment(), schema={"experiment_id": [_assert_required, _assert_string]}
     )
     response_message = GetExperiment.Response()
+    os.environ['JWT_AUTH_TOKEN'] = request.headers.get('Jwt-Auth-Token')
     experiment = _get_tracking_store().get_experiment(request_message.experiment_id).to_proto()
     response_message.experiment.MergeFrom(experiment)
     response = Response(mimetype="application/json")
@@ -583,6 +588,7 @@ def _get_experiment_by_name():
         GetExperimentByName(), schema={"experiment_name": [_assert_required, _assert_string]}
     )
     response_message = GetExperimentByName.Response()
+    os.environ['JWT_AUTH_TOKEN'] = request.headers.get('Jwt-Auth-Token')
     store_exp = _get_tracking_store().get_experiment_by_name(request_message.experiment_name)
     if store_exp is None:
         raise MlflowException(
@@ -602,6 +608,7 @@ def _delete_experiment():
     request_message = _get_request_message(
         DeleteExperiment(), schema={"experiment_id": [_assert_required, _assert_string]}
     )
+    os.environ['JWT_AUTH_TOKEN'] = request.headers.get('Jwt-Auth-Token')
     _get_tracking_store().delete_experiment(request_message.experiment_id)
     response_message = DeleteExperiment.Response()
     response = Response(mimetype="application/json")
@@ -615,6 +622,7 @@ def _restore_experiment():
     request_message = _get_request_message(
         RestoreExperiment(), schema={"experiment_id": [_assert_required, _assert_string]}
     )
+    os.environ['JWT_AUTH_TOKEN'] = request.headers.get('Jwt-Auth-Token')
     _get_tracking_store().restore_experiment(request_message.experiment_id)
     response_message = RestoreExperiment.Response()
     response = Response(mimetype="application/json")
@@ -632,6 +640,7 @@ def _update_experiment():
             "new_name": [_assert_string, _assert_required],
         },
     )
+    os.environ['JWT_AUTH_TOKEN'] = request.headers.get('Jwt-Auth-Token')
     if request_message.new_name:
         _get_tracking_store().rename_experiment(
             request_message.experiment_id, request_message.new_name
@@ -956,6 +965,7 @@ def _list_experiments():
     # https://googleapis.dev/python/protobuf/latest/google/protobuf/message.html
     # #google.protobuf.message.Message.ListFields
     params = {field.name: val for field, val in request_message.ListFields()}
+    os.environ['JWT_AUTH_TOKEN'] = request.headers.get('Jwt-Auth-Token')
     experiment_entities = _get_tracking_store().list_experiments(**params)
     response_message = ListExperiments.Response()
     response_message.experiments.extend([e.to_proto() for e in experiment_entities])
