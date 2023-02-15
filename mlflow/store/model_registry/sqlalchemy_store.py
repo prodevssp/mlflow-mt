@@ -587,8 +587,18 @@ class SqlAlchemyStore(AbstractStore):
     def _get_model_version_from_db(cls, session, name, version, conditions, query_options=None):
         if query_options is None:
             query_options = []
+        user_teams = get_authorised_teams_from_token(os.getenv('JWT_AUTH_TOKEN'))
+        team_experiment_model = session.query(SqlTeamExperimentDetails).filter(
+            SqlTeamExperimentDetails.model_name == name, SqlTeamExperimentDetails.version == version).first()
+        all_team_experiments = session.query(SqlTeamExperimentDetails).filter(
+            SqlTeamExperimentDetails.team_id.in_(user_teams)).all()
+        team_experiment_list = [int(data.experiment_id) for data in all_team_experiments]
+        if team_experiment_model.experiment_id not in team_experiment_list:
+            raise MlflowException(
+                "Model Version (name={}, version={}) not found".format(name, version),
+                RESOURCE_DOES_NOT_EXIST,
+            )
         versions = session.query(SqlModelVersion).options(*query_options).filter(*conditions).all()
-
         if len(versions) == 0:
             raise MlflowException(
                 "Model Version (name={}, version={}) not found".format(name, version),

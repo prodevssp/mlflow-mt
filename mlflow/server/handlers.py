@@ -1288,6 +1288,7 @@ def _get_model_version():
             "version": [_assert_string, _assert_required],
         },
     )
+    os.environ['JWT_AUTH_TOKEN'] = request.headers.get('Jwt-Auth-Token', '')
     model_version = _get_model_registry_store().get_model_version(
         name=request_message.name, version=request_message.version
     )
@@ -1310,6 +1311,7 @@ def _update_model_version():
     new_description = None
     if request_message.HasField("description"):
         new_description = request_message.description
+    os.environ['JWT_AUTH_TOKEN'] = request.headers.get('Jwt-Auth-Token', '')
     model_version = _get_model_registry_store().update_model_version(
         name=request_message.name, version=request_message.version, description=new_description
     )
@@ -1349,6 +1351,7 @@ def _delete_model_version():
             "version": [_assert_string, _assert_required],
         },
     )
+    os.environ['JWT_AUTH_TOKEN'] = request.headers.get('Jwt-Auth-Token', '')
     _get_model_registry_store().delete_model_version(
         name=request_message.name, version=request_message.version
     )
