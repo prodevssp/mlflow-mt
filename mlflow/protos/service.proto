@@ -669,6 +669,12 @@ message Experiment {
 
      // Experiment Id which is created under the team id
      required string experiment_id = 3;
+
+     // Model Name created on the Run of experiment
+     required string model_name = 4;
+
+     // Version of the created Model
+     required string version = 5;
  }
 
 message CreateExperiment {

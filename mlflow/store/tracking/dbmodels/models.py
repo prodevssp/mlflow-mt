@@ -456,6 +456,14 @@ class SqlTeamExperimentDetails(Base):
     """
     experiment_id: `String (limit 50 characters). Cannot be null`
     """
+    model_name = Column(String(50), nullable=True)
+    """
+    model_name: `String (limit 50 characters). Can be null`
+    """
+    version = Column(Integer, nullable=True)
+    """
+    version: `Integer. Can be null`
+    """
 
     __table_args__ = (
         PrimaryKeyConstraint("id", name="id_pk"),
@@ -473,5 +481,7 @@ class SqlTeamExperimentDetails(Base):
         return TeamExperimentDetails(
             id=self.id,
             team_id=self.team_id,
-            experiment_id=str(self.experiment_id)
+            experiment_id=str(self.experiment_id),
+            model_name=self.model_name,
+            version=self.version
         )

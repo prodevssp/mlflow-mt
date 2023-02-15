@@ -1252,6 +1252,7 @@ def _create_model_version():
             "description": [_assert_string],
         },
     )
+    os.environ['JWT_AUTH_TOKEN'] = request.headers.get('Jwt-Auth-Token', '')
     model_version = _get_model_registry_store().create_model_version(
         name=request_message.name,
         source=request_message.source,

@@ -1,3 +1,4 @@
+import os
 import time
 
 import logging
@@ -31,6 +32,8 @@ from mlflow.store.model_registry.dbmodels.models import (
     SqlRegisteredModelTag,
     SqlModelVersionTag,
 )
+from mlflow.store.tracking.dbmodels.models import SqlRun, SqlTeamExperimentDetails
+from mlflow.utils.auth_utils import get_authorised_teams_from_token
 from mlflow.utils.search_utils import SearchUtils
 from mlflow.utils.uri import extract_db_type_from_uri
 from mlflow.utils.validation import (
@@ -497,6 +500,11 @@ class SqlAlchemyStore(AbstractStore):
 
     # CRUD API for ModelVersion objects
 
+    @staticmethod
+    def _get_experiment_from_run(session, run_id):
+        run_detail = session.query(SqlRun).filter(SqlRun.run_uuid == run_id).first()
+        return run_detail.experiment_id
+
     def create_model_version(
         self, name, source, run_id=None, tags=None, run_link=None, description=None
     ):
@@ -527,6 +535,15 @@ class SqlAlchemyStore(AbstractStore):
             creation_time = now()
             for attempt in range(self.CREATE_MODEL_VERSION_RETRIES):
                 try:
+                    experiment_id = self._get_experiment_from_run(session, run_id)
+                    user_teams = get_authorised_teams_from_token(os.getenv('JWT_AUTH_TOKEN'))
+                    all_team_experiments = session.query(SqlTeamExperimentDetails).filter(
+                        SqlTeamExperimentDetails.team_id.in_(user_teams)).all()
+                    team_experiment_list = [int(data.experiment_id) for data in all_team_experiments]
+                    if experiment_id not in team_experiment_list:
+                        raise MlflowException(
+                            "No Run with id={} exists".format(run_id), RESOURCE_DOES_NOT_EXIST
+                        )
                     sql_registered_model = self._get_registered_model(session, name)
                     sql_registered_model.last_updated_time = creation_time
                     version = next_version(sql_registered_model)
@@ -546,7 +563,11 @@ class SqlAlchemyStore(AbstractStore):
                     model_version.model_version_tags = [
                         SqlModelVersionTag(key=key, value=value) for key, value in tags_dict.items()
                     ]
-                    self._save_to_db(session, [sql_registered_model, model_version])
+                    team_experiment_model = session.query(SqlTeamExperimentDetails).filter(
+                        SqlTeamExperimentDetails.experiment_id == experiment_id).first()
+                    team_experiment_model.model_name = name
+                    team_experiment_model.version = version
+                    self._save_to_db(session, [sql_registered_model, model_version, team_experiment_model])
                     session.flush()
                     return model_version.to_mlflow_entity()
                 except sqlalchemy.exc.IntegrityError:
