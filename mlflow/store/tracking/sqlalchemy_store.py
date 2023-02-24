@@ -329,9 +329,9 @@ class SqlAlchemyStore(AbstractStore):
             user_teams = get_authorised_teams_from_token(os.getenv('JWT_AUTH_TOKEN'))
             all_team_experiments = session.query(SqlTeamExperimentDetails).filter(
                 SqlTeamExperimentDetails.team_id.in_(user_teams)).all()
-            team_experiment_list = [int(data.experiment_id) for data in all_team_experiments]
-            filtered_experiments = [experiment for experiment in experiments if
-                                    int(experiment.experiment_id) in team_experiment_list]
+            team_experiment_dict = {int(data.experiment_id): data.team_id for data in all_team_experiments}
+            filtered_experiments = [{'experiment': experiment, 'team_id': team_experiment_dict.get(int(experiment.experiment_id))}
+                for experiment in experiments if int(experiment.experiment_id) in team_experiment_dict]
         if max_results is not None:
             return PagedList(filtered_experiments[:max_results], compute_next_token(len(filtered_experiments)))
         else:
