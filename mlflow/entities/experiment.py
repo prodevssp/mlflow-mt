@@ -13,13 +13,14 @@ class Experiment(_MLflowObject):
 
     DEFAULT_EXPERIMENT_NAME = "Default"
 
-    def __init__(self, experiment_id, name, artifact_location, lifecycle_stage, tags=None):
+    def __init__(self, experiment_id, name, artifact_location, lifecycle_stage, tags=None, team_id=None):
         super().__init__()
         self._experiment_id = experiment_id
         self._name = name
         self._artifact_location = artifact_location
         self._lifecycle_stage = lifecycle_stage
         self._tags = {tag.key: tag.value for tag in (tags or [])}
+        self._team_id = team_id
 
     @property
     def experiment_id(self):
@@ -49,13 +50,17 @@ class Experiment(_MLflowObject):
         """Tags that have been set on the experiment."""
         return self._tags
 
+    @property
+    def team_id(self):
+        return self._team_id
+
     def _add_tag(self, tag):
         self._tags[tag.key] = tag.value
 
     @classmethod
     def from_proto(cls, proto):
         experiment = cls(
-            proto.experiment_id, proto.name, proto.artifact_location, proto.lifecycle_stage
+            proto.experiment_id, proto.name, proto.artifact_location, proto.lifecycle_stage, proto.team_id
         )
         for proto_tag in proto.tags:
             experiment._add_tag(ExperimentTag.from_proto(proto_tag))
@@ -70,4 +75,5 @@ class Experiment(_MLflowObject):
         experiment.tags.extend(
             [ProtoExperimentTag(key=key, value=val) for key, val in self._tags.items()]
         )
+        experiment.team_id = self.team_id
         return experiment

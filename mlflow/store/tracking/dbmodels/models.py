@@ -83,7 +83,7 @@ class SqlExperiment(Base):
     def __repr__(self):
         return "<SqlExperiment ({}, {})>".format(self.experiment_id, self.name)
 
-    def to_mlflow_entity(self):
+    def to_mlflow_entity(self, team_id=None):
         """
         Convert DB model to corresponding MLflow entity.
 
@@ -95,6 +95,7 @@ class SqlExperiment(Base):
             artifact_location=self.artifact_location,
             lifecycle_stage=self.lifecycle_stage,
             tags=[t.to_mlflow_entity() for t in self.tags],
+            team_id=team_id
         )
 
 
