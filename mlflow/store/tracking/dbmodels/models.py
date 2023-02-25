@@ -449,11 +449,11 @@ class SqlTeamExperimentDetails(Base):
     """
     row id: `Integer`. *Primary Key* for ``team_experiment_details`` table.
     """
-    team_id = Column(String(50), nullable=False)
+    team_id = Column(String(50), nullable=True)
     """
     team_id: `String (limit 50 characters). Cannot be null`
     """
-    experiment_id = Column(Integer, nullable=False)
+    experiment_id = Column(Integer, nullable=True)
     """
     experiment_id: `String (limit 50 characters). Cannot be null`
     """

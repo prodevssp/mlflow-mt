@@ -1071,12 +1071,14 @@ def _create_registered_model():
         CreateRegisteredModel(),
         schema={
             "name": [_assert_string, _assert_required],
+            "team_id": [_assert_string],
             "tags": [_assert_array],
             "description": [_assert_string],
         },
     )
     registered_model = _get_model_registry_store().create_registered_model(
         name=request_message.name,
+        team_id=request_message.team_id,
         tags=request_message.tags,
         description=request_message.description,
     )

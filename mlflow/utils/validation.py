@@ -396,4 +396,4 @@ def _validate_creation_team(team_id):
     if not os.getenv('JWT_AUTH_TOKEN'):
         raise MlflowException("JWT_AUTH_TOKEN must be set in environment", INVALID_PARAMETER_VALUE)
     if team_id not in get_authorised_teams_from_token(os.getenv('JWT_AUTH_TOKEN')):
-        raise MlflowException('Team {} does not access to create experiment'.format(team_id), INVALID_PARAMETER_VALUE)
+        raise MlflowException('Team {} does not access to perform this operation'.format(team_id), INVALID_PARAMETER_VALUE)

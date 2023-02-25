@@ -42,6 +42,7 @@ from mlflow.utils.validation import (
     _validate_model_name,
     _validate_model_version,
     _validate_tag_name,
+    _validate_creation_team
 )
 
 _logger = logging.getLogger(__name__)
@@ -155,11 +156,12 @@ class SqlAlchemyStore(AbstractStore):
             # single object
             session.add(objs)
 
-    def create_registered_model(self, name, tags=None, description=None):
+    def create_registered_model(self, name, team_id=None, tags=None, description=None):
         """
         Create a new registered model in backend store.
 
         :param name: Name of the new model. This is expected to be unique in the backend store.
+        :param team_id: Team id to which the model belongs
         :param tags: A list of :py:class:`mlflow.entities.model_registry.RegisteredModelTag`
                      instances associated with this registered model.
         :param description: Description of the version.
@@ -167,6 +169,7 @@ class SqlAlchemyStore(AbstractStore):
                  created in the backend.
         """
         _validate_model_name(name)
+        _validate_creation_team(team_id)
         for tag in tags or []:
             _validate_registered_model_tag(tag.key, tag.value)
         with self.ManagedSessionMaker() as session:
@@ -184,7 +187,11 @@ class SqlAlchemyStore(AbstractStore):
                 registered_model.registered_model_tags = [
                     SqlRegisteredModelTag(key=key, value=value) for key, value in tags_dict.items()
                 ]
-                self._save_to_db(session, registered_model)
+                team_experiment_detail = SqlTeamExperimentDetails(
+                    team_id=team_id,
+                    model_name=name
+                )
+                self._save_to_db(session, [registered_model, team_experiment_detail])
                 session.flush()
                 return registered_model.to_mlflow_entity()
             except sqlalchemy.exc.IntegrityError as e:
@@ -377,8 +384,12 @@ class SqlAlchemyStore(AbstractStore):
             if page_token:
                 query = query.offset(offset)
             sql_registered_models = query.all()
+            user_teams = get_authorised_teams_from_token(os.getenv('JWT_AUTH_TOKEN'))
+            all_team_experiments = session.query(SqlTeamExperimentDetails).filter(
+                SqlTeamExperimentDetails.team_id.in_(user_teams)).all()
+            team_models = {data.model_name: data.team_id for data in all_team_experiments}
             next_page_token = compute_next_token(len(sql_registered_models))
-            rm_entities = [rm.to_mlflow_entity() for rm in sql_registered_models][:max_results]
+            rm_entities = [rm.to_mlflow_entity(team_models.get(rm.name)) for rm in sql_registered_models if rm.name in team_models][:max_results]
             return PagedList(rm_entities, next_page_token)
 
     @classmethod

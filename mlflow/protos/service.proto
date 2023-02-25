@@ -668,16 +668,16 @@ message Experiment {
      required int64 id = 1;
 
      // Team Id to which the experiment is mapped
-     required string team_id = 2;
+     optional string team_id = 2;
 
      // Experiment Id which is created under the team id
-     required string experiment_id = 3;
+     optional string experiment_id = 3;
 
      // Model Name created on the Run of experiment
-     required string model_name = 4;
+     optional string model_name = 4;
 
      // Version of the created Model
-     required string version = 5;
+     optional string version = 5;
  }
 
 message CreateExperiment {
