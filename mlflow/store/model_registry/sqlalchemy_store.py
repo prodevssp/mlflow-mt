@@ -193,7 +193,7 @@ class SqlAlchemyStore(AbstractStore):
                 )
                 self._save_to_db(session, [registered_model, team_experiment_detail])
                 session.flush()
-                return registered_model.to_mlflow_entity()
+                return registered_model.to_mlflow_entity(team_id=team_id)
             except sqlalchemy.exc.IntegrityError as e:
                 raise MlflowException(
                     "Registered Model (name={}) already exists. Error: {}".format(name, str(e)),
