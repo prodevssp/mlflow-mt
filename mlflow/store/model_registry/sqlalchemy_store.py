@@ -216,8 +216,11 @@ class SqlAlchemyStore(AbstractStore):
             .filter(SqlRegisteredModel.name == name)
             .all()
         )
-
-        if len(rms) == 0:
+        user_teams = get_authorised_teams_from_token(os.getenv('JWT_AUTH_TOKEN'))
+        all_team_registered_models = session.query(SqlTeamExperimentDetails).filter(
+            SqlTeamExperimentDetails.team_id.in_(user_teams)).all()
+        team_models_dict = {data.model_name: data.team_id for data in all_team_registered_models if data.model_name}
+        if len(rms) == 0 or name not in team_models_dict:
             raise MlflowException(
                 "Registered Model with name={} not found".format(name), RESOURCE_DOES_NOT_EXIST
             )
@@ -227,7 +230,7 @@ class SqlAlchemyStore(AbstractStore):
                 "Found {}.".format(name, len(rms)),
                 INVALID_STATE,
             )
-        return rms[0]
+        return rms[0], team_models_dict.get(name)
 
     def update_registered_model(self, name, description):
         """
@@ -238,7 +241,7 @@ class SqlAlchemyStore(AbstractStore):
         :return: A single updated :py:class:`mlflow.entities.model_registry.RegisteredModel` object.
         """
         with self.ManagedSessionMaker() as session:
-            sql_registered_model = self._get_registered_model(session, name)
+            sql_registered_model, team_id = self._get_registered_model(session, name)
             updated_time = now()
             sql_registered_model.description = description
             sql_registered_model.last_updated_time = updated_time
@@ -256,7 +259,7 @@ class SqlAlchemyStore(AbstractStore):
         """
         _validate_model_name(new_name)
         with self.ManagedSessionMaker() as session:
-            sql_registered_model = self._get_registered_model(session, name)
+            sql_registered_model, team_id = self._get_registered_model(session, name)
             try:
                 updated_time = now()
                 sql_registered_model.name = new_name
@@ -285,7 +288,7 @@ class SqlAlchemyStore(AbstractStore):
         :return: None
         """
         with self.ManagedSessionMaker() as session:
-            sql_registered_model = self._get_registered_model(session, name)
+            sql_registered_model, team_id = self._get_registered_model(session, name)
             session.delete(sql_registered_model)
 
     def list_registered_models(self, max_results, page_token):
@@ -438,7 +441,8 @@ class SqlAlchemyStore(AbstractStore):
         :return: A single :py:class:`mlflow.entities.model_registry.RegisteredModel` object.
         """
         with self.ManagedSessionMaker() as session:
-            return self._get_registered_model(session, name, eager=True).to_mlflow_entity()
+            registered_model, team_id = self._get_registered_model(session, name, eager=True)
+            return registered_model.to_mlflow_entity(team_id=team_id)
 
     def get_latest_versions(self, name, stages=None):
         """
@@ -451,7 +455,7 @@ class SqlAlchemyStore(AbstractStore):
         :return: List of :py:class:`mlflow.entities.model_registry.ModelVersion` objects.
         """
         with self.ManagedSessionMaker() as session:
-            sql_registered_model = self._get_registered_model(session, name)
+            sql_registered_model, team_id = self._get_registered_model(session, name)
             # Convert to RegisteredModel entity first and then extract latest_versions
             latest_versions = sql_registered_model.to_mlflow_entity().latest_versions
             if stages is None or len(stages) == 0:
@@ -555,7 +559,7 @@ class SqlAlchemyStore(AbstractStore):
                         raise MlflowException(
                             "No Run with id={} exists".format(run_id), RESOURCE_DOES_NOT_EXIST
                         )
-                    sql_registered_model = self._get_registered_model(session, name)
+                    sql_registered_model, team_id = self._get_registered_model(session, name)
                     sql_registered_model.last_updated_time = creation_time
                     version = next_version(sql_registered_model)
                     model_version = SqlModelVersion(
