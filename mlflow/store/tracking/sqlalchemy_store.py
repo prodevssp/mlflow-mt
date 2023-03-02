@@ -328,7 +328,7 @@ class SqlAlchemyStore(AbstractStore):
             user_teams = get_authorised_teams_from_token(os.getenv('JWT_AUTH_TOKEN'))
             all_team_experiments = session.query(SqlTeamExperimentDetails).filter(
                 SqlTeamExperimentDetails.team_id.in_(user_teams)).all()
-            team_experiment_dict = {int(data.experiment_id): data.team_id for data in all_team_experiments}
+            team_experiment_dict = {int(data.experiment_id): data.team_id for data in all_team_experiments if data.experiment_id}
             experiments = [exp.to_mlflow_entity(team_experiment_dict.get(int(exp.experiment_id))) for exp in queried_experiments]
             filtered_experiments = [experiment for experiment in experiments if
                 int(experiment.experiment_id) in team_experiment_dict]
@@ -377,19 +377,10 @@ class SqlAlchemyStore(AbstractStore):
             )
             .one_or_none()
         )
-        user_teams = get_authorised_teams_from_token(os.getenv('JWT_AUTH_TOKEN'))
-        all_team_experiments = session.query(SqlTeamExperimentDetails).filter(
-            SqlTeamExperimentDetails.team_id.in_(user_teams)).all()
-        team_experiment_list = [int(data.experiment_id) for data in all_team_experiments]
         if experiment is None:
             raise MlflowException(
                 "No Experiment with id={} exists".format(experiment_id), RESOURCE_DOES_NOT_EXIST
             )
-        if int(experiment.experiment_id) not in team_experiment_list:
-            raise MlflowException(
-                "No Experiment with id={} created by your team".format(experiment_id), RESOURCE_DOES_NOT_EXIST
-            )
-
         return experiment
 
     @staticmethod
@@ -408,9 +399,18 @@ class SqlAlchemyStore(AbstractStore):
 
     def get_experiment(self, experiment_id):
         with self.ManagedSessionMaker() as session:
-            return self._get_experiment(
+            experiment = self._get_experiment(
                 session, experiment_id, ViewType.ALL, eager=True
-            ).to_mlflow_entity()
+            )
+            user_teams = get_authorised_teams_from_token(os.getenv('JWT_AUTH_TOKEN'))
+            all_team_experiments = session.query(SqlTeamExperimentDetails).filter(
+                SqlTeamExperimentDetails.team_id.in_(user_teams)).all()
+            team_experiment_dict = {data.experiment_id: data.team_id for data in all_team_experiments}
+            if experiment.experiment_id not in team_experiment_dict:
+                raise MlflowException(
+                    "No Experiment with id={} created by your team".format(experiment_id), RESOURCE_DOES_NOT_EXIST
+                )
+            return experiment.to_mlflow_entity(team_experiment_dict.get(experiment.experiment_id))
 
     def get_experiment_by_name(self, experiment_name):
         """
@@ -429,8 +429,9 @@ class SqlAlchemyStore(AbstractStore):
             user_teams = get_authorised_teams_from_token(os.getenv('JWT_AUTH_TOKEN'))
             all_team_experiments = session.query(SqlTeamExperimentDetails).filter(
                 SqlTeamExperimentDetails.team_id.in_(user_teams)).all()
-            team_experiment_list = [int(data.experiment_id) for data in all_team_experiments]
-            return experiment.to_mlflow_entity() if experiment and int(experiment.experiment_id) in team_experiment_list else None
+            team_experiment_dict = {data.experiment_id: data.team_id for data in all_team_experiments}
+            return experiment.to_mlflow_entity(team_experiment_dict.get( experiment.experiment_id)) \
+                if experiment and experiment.experiment_id in team_experiment_dict else None
 
     def delete_experiment(self, experiment_id):
         with self.ManagedSessionMaker() as session:
