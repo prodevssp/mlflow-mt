@@ -554,7 +554,7 @@ class SqlAlchemyStore(AbstractStore):
                     user_teams = get_authorised_teams_from_token(os.getenv('JWT_AUTH_TOKEN'))
                     all_team_experiments = session.query(SqlTeamExperimentDetails).filter(
                         SqlTeamExperimentDetails.team_id.in_(user_teams)).all()
-                    team_experiment_list = [int(data.experiment_id) for data in all_team_experiments]
+                    team_experiment_list = [int(data.experiment_id) for data in all_team_experiments if data.experiment_id]
                     if experiment_id not in team_experiment_list:
                         raise MlflowException(
                             "No Run with id={} exists".format(run_id), RESOURCE_DOES_NOT_EXIST

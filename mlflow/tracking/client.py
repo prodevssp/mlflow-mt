@@ -1618,12 +1618,13 @@ class MlflowClient:
     # Registered Model Methods
 
     def create_registered_model(
-        self, name: str, tags: Optional[Dict[str, Any]] = None, description: Optional[str] = None
+        self, name: str, team_id: Optional[str], tags: Optional[Dict[str, Any]] = None, description: Optional[str] = None
     ) -> RegisteredModel:
         """
         Create a new registered model in backend store.
 
         :param name: Name of the new model. This is expected to be unique in the backend store.
+        :param team_id: Team under which the model is registered.
         :param tags: A dictionary of key-value pairs that are converted into
                      :py:class:`mlflow.entities.model_registry.RegisteredModelTag` objects.
         :param description: Description of the model.
@@ -1657,7 +1658,7 @@ class MlflowClient:
             tags: {'nlp.framework': 'Spark NLP'}
             description: This sentiment analysis model classifies the tone-happy, sad, angry.
         """
-        return self._get_registry_client().create_registered_model(name, tags, description)
+        return self._get_registry_client().create_registered_model(name, team_id, tags, description)
 
     def rename_registered_model(self, name: str, new_name: str) -> RegisteredModel:
         """
