@@ -41,11 +41,12 @@ class ModelRegistryClient:
 
     # Registered Model Methods
 
-    def create_registered_model(self, name, tags=None, description=None):
+    def create_registered_model(self, name, team_id=None, tags=None, description=None):
         """
          Create a new registered model in backend store.
 
          :param name: Name of the new model. This is expected to be unique in the backend store.
+         :param team_id: Team under which the model is registered.
          :param tags: A dictionary of key-value pairs that are converted into
                       :py:class:`mlflow.entities.model_registry.RegisteredModelTag` objects.
         :param description: Description of the model.
@@ -56,7 +57,7 @@ class ModelRegistryClient:
         #       Those are constraints applicable to any backend, given the model URI format.
         tags = tags if tags else {}
         tags = [RegisteredModelTag(key, str(value)) for key, value in tags.items()]
-        return self.store.create_registered_model(name, tags, description)
+        return self.store.create_registered_model(name, team_id, tags, description)
 
     def update_registered_model(self, name, description):
         """

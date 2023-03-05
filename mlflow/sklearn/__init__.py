@@ -314,6 +314,7 @@ def log_model(
     code_paths=None,
     serialization_format=SERIALIZATION_FORMAT_CLOUDPICKLE,
     registered_model_name=None,
+    team_id=None,
     signature: ModelSignature = None,
     input_example: ModelInputExample = None,
     await_registration_for=DEFAULT_AWAIT_MAX_SLEEP_SECONDS,
@@ -343,7 +344,7 @@ def log_model(
     :param registered_model_name: If given, create a model version under
                                   ``registered_model_name``, also creating a registered model if one
                                   with the given name does not exist.
-
+    :param team_id: team_id under which the model is created.
     :param signature: :py:class:`ModelSignature <mlflow.models.ModelSignature>`
                       describes model input and output :py:class:`Schema <mlflow.types.Schema>`.
                       The model signature can be :py:func:`inferred <mlflow.models.infer_signature>`
@@ -398,6 +399,7 @@ def log_model(
         code_paths=code_paths,
         serialization_format=serialization_format,
         registered_model_name=registered_model_name,
+        team_id=team_id,
         signature=signature,
         input_example=input_example,
         await_registration_for=await_registration_for,

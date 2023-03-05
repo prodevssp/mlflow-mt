@@ -246,6 +246,7 @@ class Model:
         artifact_path,
         flavor,
         registered_model_name=None,
+        team_id=None,
         await_registration_for=DEFAULT_AWAIT_MAX_SLEEP_SECONDS,
         **kwargs,
     ):
@@ -260,6 +261,7 @@ class Model:
         :param registered_model_name: If given, create a model version under
                                       ``registered_model_name``, also creating a registered model if
                                       one with the given name does not exist.
+        :param team_id: team_id under which the model is created.
         :param signature: :py:class:`ModelSignature` describes model input
                           and output :py:class:`Schema <mlflow.types.Schema>`. The model signature
                           can be :py:func:`inferred <infer_signature>` from datasets representing
@@ -304,6 +306,7 @@ class Model:
                 mlflow.register_model(
                     "runs:/%s/%s" % (run_id, artifact_path),
                     registered_model_name,
+                    team_id=team_id,
                     await_registration_for=await_registration_for,
                 )
         return mlflow_model.get_model_info()

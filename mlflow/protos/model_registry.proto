@@ -327,25 +327,28 @@ message RegisteredModel {
   // Unique name for the model.
   optional string name = 1;
 
+  // Team Id under which model is created
+  optional string team_id = 2;
+
   // Timestamp recorded when this ``registered_model`` was created.
-  optional int64 creation_timestamp = 2;
+  optional int64 creation_timestamp = 3;
 
   // Timestamp recorded when metadata for this ``registered_model`` was last updated.
-  optional int64 last_updated_timestamp = 3;
+  optional int64 last_updated_timestamp = 4;
 
   // User that created this ``registered_model``
   // NOTE: this field is not currently returned.
-  optional string user_id = 4;
+  optional string user_id = 5;
 
   // Description of this ``registered_model``.
-  optional string description = 5;
+  optional string description = 6;
 
   // Collection of latest model versions for each stage.
   // Only contains models with current ``READY`` status.
-  repeated ModelVersion latest_versions = 6;
+  repeated ModelVersion latest_versions = 7;
 
   // Tags: Additional metadata key-value pairs for this ``registered_model``.
-  repeated RegisteredModelTag tags = 7;
+  repeated RegisteredModelTag tags = 8;
 }
 
 enum ModelVersionStatus {
@@ -407,11 +410,14 @@ message CreateRegisteredModel {
   // Register models under this name
   optional string name = 1 [(validate_required) = true];
 
+  // Register model under this team
+  optional string team_id = 2;
+
   // Additional metadata for registered model.
-  repeated RegisteredModelTag tags = 2;
+  repeated RegisteredModelTag tags = 3;
 
   // Optional description for registered model.
-  optional string description = 3;
+  optional string description = 4;
 
   message Response {
     optional RegisteredModel registered_model = 1;

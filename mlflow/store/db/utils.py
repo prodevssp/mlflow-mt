@@ -7,6 +7,7 @@ import logging
 from alembic.migration import MigrationContext  # pylint: disable=import-error
 from alembic.script import ScriptDirectory
 import sqlalchemy
+from sqlalchemy import sql
 
 from mlflow.exceptions import MlflowException
 from mlflow.store.tracking.dbmodels.initial_models import Base as InitialBase
@@ -74,8 +75,8 @@ def _get_managed_session_maker(SessionMaker, db_type):
         session = SessionMaker()
         try:
             if db_type == SQLITE:
-                session.execute("PRAGMA foreign_keys = ON;")
-                session.execute("PRAGMA case_sensitive_like = true;")
+                session.execute(sql.text("PRAGMA foreign_keys = ON;"))
+                session.execute(sql.text("PRAGMA case_sensitive_like = true;"))
             yield session
             session.commit()
         except MlflowException:

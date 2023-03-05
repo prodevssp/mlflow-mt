@@ -40,7 +40,7 @@ class SqlRegisteredModel(Base):
             self.name, self.description, self.creation_time, self.last_updated_time
         )
 
-    def to_mlflow_entity(self):
+    def to_mlflow_entity(self, team_id=None):
         # SqlRegisteredModel has backref to all "model_versions". Filter latest for each stage.
         latest_versions = {}
         for mv in self.model_versions:
@@ -51,6 +51,7 @@ class SqlRegisteredModel(Base):
                 latest_versions[stage] = mv
         return RegisteredModel(
             self.name,
+            team_id,
             self.creation_time,
             self.last_updated_time,
             self.description,

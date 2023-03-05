@@ -83,7 +83,7 @@ class RestStore(AbstractStore):
         )
         return PagedList(experiments, token)
 
-    def create_experiment(self, name, artifact_location=None, tags=None):
+    def create_experiment(self, name, artifact_location=None, tags=None, team_id=None):
         """
         Create a new experiment.
         If an experiment with the given name already exists, throws exception.
@@ -94,7 +94,7 @@ class RestStore(AbstractStore):
         """
         tag_protos = [tag.to_proto() for tag in tags] if tags else []
         req_body = message_to_json(
-            CreateExperiment(name=name, artifact_location=artifact_location, tags=tag_protos)
+            CreateExperiment(name=name, artifact_location=artifact_location, tags=tag_protos, team_id=team_id)
         )
         response_proto = self._call_endpoint(CreateExperiment, req_body)
         return response_proto.experiment_id

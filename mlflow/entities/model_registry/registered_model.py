@@ -15,6 +15,7 @@ class RegisteredModel(_ModelRegistryEntity):
     def __init__(
         self,
         name,
+        team_id=None,
         creation_timestamp=None,
         last_updated_timestamp=None,
         description=None,
@@ -24,6 +25,7 @@ class RegisteredModel(_ModelRegistryEntity):
         # Constructor is called only from within the system by various backend stores.
         super().__init__()
         self._name = name
+        self._team_id = team_id
         self._creation_time = creation_timestamp
         self._last_updated_timestamp = last_updated_timestamp
         self._description = description
@@ -34,6 +36,11 @@ class RegisteredModel(_ModelRegistryEntity):
     def name(self):
         """String. Registered model name."""
         return self._name
+
+    @property
+    def team_id(self):
+        """String. Team Id"""
+        return self._team_id
 
     @property
     def creation_timestamp(self):
@@ -90,6 +97,7 @@ class RegisteredModel(_ModelRegistryEntity):
         # returns mlflow.protos.model_registry_pb2.RegisteredModel
         rmd = ProtoRegisteredModel()
         rmd.name = self.name
+        rmd.team_id = self.team_id
         if self.creation_timestamp is not None:
             rmd.creation_timestamp = self.creation_timestamp
         if self.last_updated_timestamp:

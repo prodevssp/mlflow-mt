@@ -78,6 +78,7 @@ from mlflow.store.artifact.artifact_repository_registry import get_artifact_repo
 from mlflow.store.db.db_types import DATABASE_ENGINES
 from mlflow.tracking._model_registry.registry import ModelRegistryStoreRegistry
 from mlflow.tracking._tracking_service.registry import TrackingStoreRegistry
+from mlflow.utils.auth_utils import get_authorised_teams_from_token
 from mlflow.utils.proto_json_utils import message_to_json, parse_dict
 from mlflow.utils.validation import _validate_batch_log_api_req
 from mlflow.utils.string_utils import is_string_type
@@ -547,12 +548,15 @@ def _create_experiment():
             "name": [_assert_required, _assert_string],
             "artifact_location": [_assert_string],
             "tags": [_assert_array],
+            "team_id": [_assert_string]
         },
     )
 
     tags = [ExperimentTag(tag.key, tag.value) for tag in request_message.tags]
+    if request_message.team_id not in get_authorised_teams_from_token(os.environ.get('JWT_AUTH_TOKEN')):
+        raise MlflowException('Team {} not authorised to perform create operation'.format(request_message.team_id), INVALID_PARAMETER_VALUE)
     experiment_id = _get_tracking_store().create_experiment(
-        request_message.name, request_message.artifact_location, tags
+        request_message.name, request_message.artifact_location, tags, request_message.team_id
     )
     response_message = CreateExperiment.Response()
     response_message.experiment_id = experiment_id
@@ -631,6 +635,7 @@ def _update_experiment():
             "new_name": [_assert_string, _assert_required],
         },
     )
+    os.environ['JWT_AUTH_TOKEN'] = request.headers.get('Jwt-Auth-Token')
     if request_message.new_name:
         _get_tracking_store().rename_experiment(
             request_message.experiment_id, request_message.new_name
@@ -1060,12 +1065,14 @@ def _create_registered_model():
         CreateRegisteredModel(),
         schema={
             "name": [_assert_string, _assert_required],
+            "team_id": [_assert_string],
             "tags": [_assert_array],
             "description": [_assert_string],
         },
     )
     registered_model = _get_model_registry_store().create_registered_model(
         name=request_message.name,
+        team_id=request_message.team_id,
         tags=request_message.tags,
         description=request_message.description,
     )
@@ -1276,6 +1283,7 @@ def _get_model_version():
             "version": [_assert_string, _assert_required],
         },
     )
+    os.environ['JWT_AUTH_TOKEN'] = request.headers.get('Jwt-Auth-Token', '')
     model_version = _get_model_registry_store().get_model_version(
         name=request_message.name, version=request_message.version
     )
@@ -1298,6 +1306,7 @@ def _update_model_version():
     new_description = None
     if request_message.HasField("description"):
         new_description = request_message.description
+    os.environ['JWT_AUTH_TOKEN'] = request.headers.get('Jwt-Auth-Token', '')
     model_version = _get_model_registry_store().update_model_version(
         name=request_message.name, version=request_message.version, description=new_description
     )
@@ -1337,6 +1346,7 @@ def _delete_model_version():
             "version": [_assert_string, _assert_required],
         },
     )
+    os.environ['JWT_AUTH_TOKEN'] = request.headers.get('Jwt-Auth-Token', '')
     _get_model_registry_store().delete_model_version(
         name=request_message.name, version=request_message.version
     )

@@ -1,14 +1,17 @@
 import os
-
 import click
-from tabulate import tabulate
-
 import mlflow
 from mlflow.data import is_uri
+from tabulate import tabulate
 from mlflow.entities import ViewType
+from mlflow.exceptions import MlflowException
 from mlflow.tracking import _get_store, fluent
+from mlflow.protos.databricks_pb2 import INVALID_PARAMETER_VALUE
+from mlflow.utils.auth_utils import get_jwt_token_for_user, get_authorised_teams_from_token
+
 
 EXPERIMENT_ID = click.option("--experiment-id", "-x", type=click.STRING, required=True)
+TEAM_ID = click.option('--team-id', type=click.STRING, required=True)
 
 
 @click.group("experiments")
@@ -31,7 +34,8 @@ def commands():
     "more info on the properties of artifact location. "
     "If no location is provided, the tracking server will pick a default.",
 )
-def create(experiment_name, artifact_location):
+@TEAM_ID
+def create(experiment_name, artifact_location, team_id):
     """
     Create an experiment.
 
@@ -43,7 +47,9 @@ def create(experiment_name, artifact_location):
     as subfolders.
     """
     store = _get_store()
-    exp_id = store.create_experiment(experiment_name, artifact_location)
+    if team_id not in get_authorised_teams_from_token(os.environ.get('JWT_AUTH_TOKEN')):
+        raise MlflowException('Team {} not authorised to perform create operation'.format(team_id), INVALID_PARAMETER_VALUE)
+    exp_id = store.create_experiment(experiment_name, artifact_location, team_id=team_id)
     click.echo("Created experiment '%s' with id %s" % (experiment_name, exp_id))
 
 
@@ -65,13 +71,14 @@ def list_experiments(view):
         [
             exp.experiment_id,
             exp.name,
+            exp.team_id,
             exp.artifact_location
             if is_uri(exp.artifact_location)
             else os.path.abspath(exp.artifact_location),
         ]
         for exp in experiments
     ]
-    click.echo(tabulate(sorted(table), headers=["Experiment Id", "Name", "Artifact Location"]))
+    click.echo(tabulate(sorted(table), headers=["Experiment Id", "Name", "Team", "Artifact Location"]))
 
 
 @commands.command("delete")

@@ -1,3 +1,4 @@
+import os
 import time
 
 import logging
@@ -31,6 +32,8 @@ from mlflow.store.model_registry.dbmodels.models import (
     SqlRegisteredModelTag,
     SqlModelVersionTag,
 )
+from mlflow.store.tracking.dbmodels.models import SqlRun, SqlTeamExperimentDetails
+from mlflow.utils.auth_utils import get_authorised_teams_from_token
 from mlflow.utils.search_utils import SearchUtils
 from mlflow.utils.uri import extract_db_type_from_uri
 from mlflow.utils.validation import (
@@ -39,6 +42,7 @@ from mlflow.utils.validation import (
     _validate_model_name,
     _validate_model_version,
     _validate_tag_name,
+    _validate_creation_team
 )
 
 _logger = logging.getLogger(__name__)
@@ -152,11 +156,12 @@ class SqlAlchemyStore(AbstractStore):
             # single object
             session.add(objs)
 
-    def create_registered_model(self, name, tags=None, description=None):
+    def create_registered_model(self, name, team_id=None, tags=None, description=None):
         """
         Create a new registered model in backend store.
 
         :param name: Name of the new model. This is expected to be unique in the backend store.
+        :param team_id: Team id to which the model belongs
         :param tags: A list of :py:class:`mlflow.entities.model_registry.RegisteredModelTag`
                      instances associated with this registered model.
         :param description: Description of the version.
@@ -164,6 +169,7 @@ class SqlAlchemyStore(AbstractStore):
                  created in the backend.
         """
         _validate_model_name(name)
+        _validate_creation_team(team_id)
         for tag in tags or []:
             _validate_registered_model_tag(tag.key, tag.value)
         with self.ManagedSessionMaker() as session:
@@ -181,9 +187,13 @@ class SqlAlchemyStore(AbstractStore):
                 registered_model.registered_model_tags = [
                     SqlRegisteredModelTag(key=key, value=value) for key, value in tags_dict.items()
                 ]
-                self._save_to_db(session, registered_model)
+                team_experiment_detail = SqlTeamExperimentDetails(
+                    team_id=team_id,
+                    model_name=name
+                )
+                self._save_to_db(session, [registered_model, team_experiment_detail])
                 session.flush()
-                return registered_model.to_mlflow_entity()
+                return registered_model.to_mlflow_entity(team_id=team_id)
             except sqlalchemy.exc.IntegrityError as e:
                 raise MlflowException(
                     "Registered Model (name={}) already exists. Error: {}".format(name, str(e)),
@@ -206,8 +216,11 @@ class SqlAlchemyStore(AbstractStore):
             .filter(SqlRegisteredModel.name == name)
             .all()
         )
-
-        if len(rms) == 0:
+        user_teams = get_authorised_teams_from_token(os.getenv('JWT_AUTH_TOKEN'))
+        all_team_registered_models = session.query(SqlTeamExperimentDetails).filter(
+            SqlTeamExperimentDetails.team_id.in_(user_teams)).all()
+        team_models_dict = {data.model_name: data.team_id for data in all_team_registered_models if data.model_name}
+        if len(rms) == 0 or name not in team_models_dict:
             raise MlflowException(
                 "Registered Model with name={} not found".format(name), RESOURCE_DOES_NOT_EXIST
             )
@@ -217,7 +230,7 @@ class SqlAlchemyStore(AbstractStore):
                 "Found {}.".format(name, len(rms)),
                 INVALID_STATE,
             )
-        return rms[0]
+        return rms[0], team_models_dict.get(name)
 
     def update_registered_model(self, name, description):
         """
@@ -228,7 +241,7 @@ class SqlAlchemyStore(AbstractStore):
         :return: A single updated :py:class:`mlflow.entities.model_registry.RegisteredModel` object.
         """
         with self.ManagedSessionMaker() as session:
-            sql_registered_model = self._get_registered_model(session, name)
+            sql_registered_model, team_id = self._get_registered_model(session, name)
             updated_time = now()
             sql_registered_model.description = description
             sql_registered_model.last_updated_time = updated_time
@@ -246,7 +259,7 @@ class SqlAlchemyStore(AbstractStore):
         """
         _validate_model_name(new_name)
         with self.ManagedSessionMaker() as session:
-            sql_registered_model = self._get_registered_model(session, name)
+            sql_registered_model, team_id = self._get_registered_model(session, name)
             try:
                 updated_time = now()
                 sql_registered_model.name = new_name
@@ -275,7 +288,7 @@ class SqlAlchemyStore(AbstractStore):
         :return: None
         """
         with self.ManagedSessionMaker() as session:
-            sql_registered_model = self._get_registered_model(session, name)
+            sql_registered_model, team_id = self._get_registered_model(session, name)
             session.delete(sql_registered_model)
 
     def list_registered_models(self, max_results, page_token):
@@ -374,8 +387,12 @@ class SqlAlchemyStore(AbstractStore):
             if page_token:
                 query = query.offset(offset)
             sql_registered_models = query.all()
+            user_teams = get_authorised_teams_from_token(os.getenv('JWT_AUTH_TOKEN'))
+            all_team_experiments = session.query(SqlTeamExperimentDetails).filter(
+                SqlTeamExperimentDetails.team_id.in_(user_teams)).all()
+            team_models = {data.model_name: data.team_id for data in all_team_experiments}
             next_page_token = compute_next_token(len(sql_registered_models))
-            rm_entities = [rm.to_mlflow_entity() for rm in sql_registered_models][:max_results]
+            rm_entities = [rm.to_mlflow_entity(team_models.get(rm.name)) for rm in sql_registered_models if rm.name in team_models][:max_results]
             return PagedList(rm_entities, next_page_token)
 
     @classmethod
@@ -424,7 +441,8 @@ class SqlAlchemyStore(AbstractStore):
         :return: A single :py:class:`mlflow.entities.model_registry.RegisteredModel` object.
         """
         with self.ManagedSessionMaker() as session:
-            return self._get_registered_model(session, name, eager=True).to_mlflow_entity()
+            registered_model, team_id = self._get_registered_model(session, name, eager=True)
+            return registered_model.to_mlflow_entity(team_id=team_id)
 
     def get_latest_versions(self, name, stages=None):
         """
@@ -437,7 +455,7 @@ class SqlAlchemyStore(AbstractStore):
         :return: List of :py:class:`mlflow.entities.model_registry.ModelVersion` objects.
         """
         with self.ManagedSessionMaker() as session:
-            sql_registered_model = self._get_registered_model(session, name)
+            sql_registered_model, team_id = self._get_registered_model(session, name)
             # Convert to RegisteredModel entity first and then extract latest_versions
             latest_versions = sql_registered_model.to_mlflow_entity().latest_versions
             if stages is None or len(stages) == 0:
@@ -497,6 +515,11 @@ class SqlAlchemyStore(AbstractStore):
 
     # CRUD API for ModelVersion objects
 
+    @staticmethod
+    def _get_experiment_from_run(session, run_id):
+        run_detail = session.query(SqlRun).filter(SqlRun.run_uuid == run_id).first()
+        return run_detail.experiment_id
+
     def create_model_version(
         self, name, source, run_id=None, tags=None, run_link=None, description=None
     ):
@@ -527,7 +550,16 @@ class SqlAlchemyStore(AbstractStore):
             creation_time = now()
             for attempt in range(self.CREATE_MODEL_VERSION_RETRIES):
                 try:
-                    sql_registered_model = self._get_registered_model(session, name)
+                    experiment_id = self._get_experiment_from_run(session, run_id)
+                    user_teams = get_authorised_teams_from_token(os.getenv('JWT_AUTH_TOKEN'))
+                    all_team_experiments = session.query(SqlTeamExperimentDetails).filter(
+                        SqlTeamExperimentDetails.team_id.in_(user_teams)).all()
+                    team_experiment_list = [int(data.experiment_id) for data in all_team_experiments if data.experiment_id]
+                    if experiment_id not in team_experiment_list:
+                        raise MlflowException(
+                            "No Run with id={} exists".format(run_id), RESOURCE_DOES_NOT_EXIST
+                        )
+                    sql_registered_model, team_id = self._get_registered_model(session, name)
                     sql_registered_model.last_updated_time = creation_time
                     version = next_version(sql_registered_model)
                     model_version = SqlModelVersion(
@@ -546,7 +578,11 @@ class SqlAlchemyStore(AbstractStore):
                     model_version.model_version_tags = [
                         SqlModelVersionTag(key=key, value=value) for key, value in tags_dict.items()
                     ]
-                    self._save_to_db(session, [sql_registered_model, model_version])
+                    team_experiment_model = session.query(SqlTeamExperimentDetails).filter(
+                        SqlTeamExperimentDetails.experiment_id == experiment_id).first()
+                    team_experiment_model.model_name = name
+                    team_experiment_model.version = version
+                    self._save_to_db(session, [sql_registered_model, model_version, team_experiment_model])
                     session.flush()
                     return model_version.to_mlflow_entity()
                 except sqlalchemy.exc.IntegrityError:
@@ -566,8 +602,18 @@ class SqlAlchemyStore(AbstractStore):
     def _get_model_version_from_db(cls, session, name, version, conditions, query_options=None):
         if query_options is None:
             query_options = []
+        user_teams = get_authorised_teams_from_token(os.getenv('JWT_AUTH_TOKEN'))
+        team_experiment_model = session.query(SqlTeamExperimentDetails).filter(
+            SqlTeamExperimentDetails.model_name == name, SqlTeamExperimentDetails.version == version).first()
+        all_team_experiments = session.query(SqlTeamExperimentDetails).filter(
+            SqlTeamExperimentDetails.team_id.in_(user_teams)).all()
+        team_experiment_list = [int(data.experiment_id) for data in all_team_experiments]
+        if team_experiment_model.experiment_id not in team_experiment_list:
+            raise MlflowException(
+                "Model Version (name={}, version={}) not found".format(name, version),
+                RESOURCE_DOES_NOT_EXIST,
+            )
         versions = session.query(SqlModelVersion).options(*query_options).filter(*conditions).all()
-
         if len(versions) == 0:
             raise MlflowException(
                 "Model Version (name={}, version={}) not found".format(name, version),

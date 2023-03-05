@@ -466,6 +466,7 @@ class MlflowClient:
         name: str,
         artifact_location: Optional[str] = None,
         tags: Optional[Dict[str, Any]] = None,
+        team_id: Optional[str] = None
     ) -> str:
         """Create an experiment.
 
@@ -475,6 +476,7 @@ class MlflowClient:
         :param tags: A dictionary of key-value pairs that are converted into
                                 :py:class:`mlflow.entities.ExperimentTag` objects, set as
                                 experiment tags upon experiment creation.
+        :param team_id: Team id under which the experiment is created
         :return: String as an integer ID of the created experiment.
 
         .. code-block:: python
@@ -504,7 +506,7 @@ class MlflowClient:
             Tags: {'nlp.framework': 'Spark NLP'}
             Lifecycle_stage: active
         """
-        return self._tracking_client.create_experiment(name, artifact_location, tags)
+        return self._tracking_client.create_experiment(name, artifact_location, tags, team_id=team_id)
 
     def delete_experiment(self, experiment_id: str) -> None:
         """
@@ -1616,12 +1618,13 @@ class MlflowClient:
     # Registered Model Methods
 
     def create_registered_model(
-        self, name: str, tags: Optional[Dict[str, Any]] = None, description: Optional[str] = None
+        self, name: str, team_id: Optional[str], tags: Optional[Dict[str, Any]] = None, description: Optional[str] = None
     ) -> RegisteredModel:
         """
         Create a new registered model in backend store.
 
         :param name: Name of the new model. This is expected to be unique in the backend store.
+        :param team_id: Team under which the model is registered.
         :param tags: A dictionary of key-value pairs that are converted into
                      :py:class:`mlflow.entities.model_registry.RegisteredModelTag` objects.
         :param description: Description of the model.
@@ -1655,7 +1658,7 @@ class MlflowClient:
             tags: {'nlp.framework': 'Spark NLP'}
             description: This sentiment analysis model classifies the tone-happy, sad, angry.
         """
-        return self._get_registry_client().create_registered_model(name, tags, description)
+        return self._get_registry_client().create_registered_model(name, team_id, tags, description)
 
     def rename_registered_model(self, name: str, new_name: str) -> RegisteredModel:
         """

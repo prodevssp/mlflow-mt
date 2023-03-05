@@ -773,125 +773,6 @@ public final class Databricks {
     getUnknownFields() {
       return this.unknownFields;
     }
-    private DatabricksRpcOptions(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 10: {
-              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
-                endpoints_ = new java.util.ArrayList<com.databricks.api.proto.databricks.Databricks.HttpEndpoint>();
-                mutable_bitField0_ |= 0x00000001;
-              }
-              endpoints_.add(
-                  input.readMessage(com.databricks.api.proto.databricks.Databricks.HttpEndpoint.PARSER, extensionRegistry));
-              break;
-            }
-            case 16: {
-              int rawValue = input.readEnum();
-                @SuppressWarnings("deprecation")
-              com.databricks.api.proto.databricks.Databricks.Visibility value = com.databricks.api.proto.databricks.Databricks.Visibility.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(2, rawValue);
-              } else {
-                bitField0_ |= 0x00000001;
-                visibility_ = rawValue;
-              }
-              break;
-            }
-            case 24: {
-              int rawValue = input.readEnum();
-              @SuppressWarnings("deprecation")
-              com.databricks.api.proto.databricks.Databricks.ErrorCode value = com.databricks.api.proto.databricks.Databricks.ErrorCode.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(3, rawValue);
-              } else {
-                if (!((mutable_bitField0_ & 0x00000004) != 0)) {
-                  errorCodes_ = new java.util.ArrayList<java.lang.Integer>();
-                  mutable_bitField0_ |= 0x00000004;
-                }
-                errorCodes_.add(rawValue);
-              }
-              break;
-            }
-            case 26: {
-              int length = input.readRawVarint32();
-              int oldLimit = input.pushLimit(length);
-              while(input.getBytesUntilLimit() > 0) {
-                int rawValue = input.readEnum();
-                @SuppressWarnings("deprecation")
-                com.databricks.api.proto.databricks.Databricks.ErrorCode value = com.databricks.api.proto.databricks.Databricks.ErrorCode.valueOf(rawValue);
-                if (value == null) {
-                  unknownFields.mergeVarintField(3, rawValue);
-                } else {
-                  if (!((mutable_bitField0_ & 0x00000004) != 0)) {
-                    errorCodes_ = new java.util.ArrayList<java.lang.Integer>();
-                    mutable_bitField0_ |= 0x00000004;
-                  }
-                  errorCodes_.add(rawValue);
-                }
-              }
-              input.popLimit(oldLimit);
-              break;
-            }
-            case 34: {
-              com.databricks.api.proto.databricks.Databricks.RateLimit.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000002) != 0)) {
-                subBuilder = rateLimit_.toBuilder();
-              }
-              rateLimit_ = input.readMessage(com.databricks.api.proto.databricks.Databricks.RateLimit.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(rateLimit_);
-                rateLimit_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00000002;
-              break;
-            }
-            case 42: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000004;
-              rpcDocTitle_ = bs;
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000001) != 0)) {
-          endpoints_ = java.util.Collections.unmodifiableList(endpoints_);
-        }
-        if (((mutable_bitField0_ & 0x00000004) != 0)) {
-          errorCodes_ = java.util.Collections.unmodifiableList(errorCodes_);
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return com.databricks.api.proto.databricks.Databricks.internal_static_mlflow_DatabricksRpcOptions_descriptor;
@@ -907,6 +788,7 @@ public final class Databricks {
 
     private int bitField0_;
     public static final int ENDPOINTS_FIELD_NUMBER = 1;
+    @SuppressWarnings("serial")
     private java.util.List<com.databricks.api.proto.databricks.Databricks.HttpEndpoint> endpoints_;
     /**
      * <code>repeated .mlflow.HttpEndpoint endpoints = 1;</code>
@@ -947,7 +829,7 @@ public final class Databricks {
     }
 
     public static final int VISIBILITY_FIELD_NUMBER = 2;
-    private int visibility_;
+    private int visibility_ = 1;
     /**
      * <pre>
      * Indicates which users are allowed to initiate this RPC.
@@ -968,20 +850,19 @@ public final class Databricks {
      * @return The visibility.
      */
     @java.lang.Override public com.databricks.api.proto.databricks.Databricks.Visibility getVisibility() {
-      @SuppressWarnings("deprecation")
-      com.databricks.api.proto.databricks.Databricks.Visibility result = com.databricks.api.proto.databricks.Databricks.Visibility.valueOf(visibility_);
+      com.databricks.api.proto.databricks.Databricks.Visibility result = com.databricks.api.proto.databricks.Databricks.Visibility.forNumber(visibility_);
       return result == null ? com.databricks.api.proto.databricks.Databricks.Visibility.PUBLIC : result;
     }
 
     public static final int ERROR_CODES_FIELD_NUMBER = 3;
+    @SuppressWarnings("serial")
     private java.util.List<java.lang.Integer> errorCodes_;
     private static final com.google.protobuf.Internal.ListAdapter.Converter<
         java.lang.Integer, com.databricks.api.proto.databricks.Databricks.ErrorCode> errorCodes_converter_ =
             new com.google.protobuf.Internal.ListAdapter.Converter<
                 java.lang.Integer, com.databricks.api.proto.databricks.Databricks.ErrorCode>() {
               public com.databricks.api.proto.databricks.Databricks.ErrorCode convert(java.lang.Integer from) {
-                @SuppressWarnings("deprecation")
-                com.databricks.api.proto.databricks.Databricks.ErrorCode result = com.databricks.api.proto.databricks.Databricks.ErrorCode.valueOf(from);
+                com.databricks.api.proto.databricks.Databricks.ErrorCode result = com.databricks.api.proto.databricks.Databricks.ErrorCode.forNumber(from);
                 return result == null ? com.databricks.api.proto.databricks.Databricks.ErrorCode.INTERNAL_ERROR : result;
               }
             };
@@ -1066,7 +947,8 @@ public final class Databricks {
     }
 
     public static final int RPC_DOC_TITLE_FIELD_NUMBER = 5;
-    private volatile java.lang.Object rpcDocTitle_;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object rpcDocTitle_ = "";
     /**
      * <pre>
      * If defined, overrides the default title used for in the API docs. See ProtobufDocGenerator
@@ -1157,7 +1039,7 @@ public final class Databricks {
       if (((bitField0_ & 0x00000004) != 0)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 5, rpcDocTitle_);
       }
-      unknownFields.writeTo(output);
+      getUnknownFields().writeTo(output);
     }
 
     @java.lang.Override
@@ -1190,7 +1072,7 @@ public final class Databricks {
       if (((bitField0_ & 0x00000004) != 0)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(5, rpcDocTitle_);
       }
-      size += unknownFields.getSerializedSize();
+      size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -1222,7 +1104,7 @@ public final class Databricks {
         if (!getRpcDocTitle()
             .equals(other.getRpcDocTitle())) return false;
       }
-      if (!unknownFields.equals(other.unknownFields)) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
 
@@ -1253,7 +1135,7 @@ public final class Databricks {
         hash = (37 * hash) + RPC_DOC_TITLE_FIELD_NUMBER;
         hash = (53 * hash) + getRpcDocTitle().hashCode();
       }
-      hash = (29 * hash) + unknownFields.hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -1393,24 +1275,23 @@ public final class Databricks {
       @java.lang.Override
       public Builder clear() {
         super.clear();
+        bitField0_ = 0;
         if (endpointsBuilder_ == null) {
           endpoints_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
         } else {
+          endpoints_ = null;
           endpointsBuilder_.clear();
         }
+        bitField0_ = (bitField0_ & ~0x00000001);
         visibility_ = 1;
-        bitField0_ = (bitField0_ & ~0x00000002);
         errorCodes_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000004);
-        if (rateLimitBuilder_ == null) {
-          rateLimit_ = null;
-        } else {
-          rateLimitBuilder_.clear();
+        rateLimit_ = null;
+        if (rateLimitBuilder_ != null) {
+          rateLimitBuilder_.dispose();
+          rateLimitBuilder_ = null;
         }
-        bitField0_ = (bitField0_ & ~0x00000008);
         rpcDocTitle_ = "";
-        bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
 
@@ -1437,8 +1318,13 @@ public final class Databricks {
       @java.lang.Override
       public com.databricks.api.proto.databricks.Databricks.DatabricksRpcOptions buildPartial() {
         com.databricks.api.proto.databricks.Databricks.DatabricksRpcOptions result = new com.databricks.api.proto.databricks.Databricks.DatabricksRpcOptions(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
+        buildPartialRepeatedFields(result);
+        if (bitField0_ != 0) { buildPartial0(result); }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartialRepeatedFields(com.databricks.api.proto.databricks.Databricks.DatabricksRpcOptions result) {
         if (endpointsBuilder_ == null) {
           if (((bitField0_ & 0x00000001) != 0)) {
             endpoints_ = java.util.Collections.unmodifiableList(endpoints_);
@@ -1448,30 +1334,31 @@ public final class Databricks {
         } else {
           result.endpoints_ = endpointsBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00000002) != 0)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.visibility_ = visibility_;
         if (((bitField0_ & 0x00000004) != 0)) {
           errorCodes_ = java.util.Collections.unmodifiableList(errorCodes_);
           bitField0_ = (bitField0_ & ~0x00000004);
         }
         result.errorCodes_ = errorCodes_;
+      }
+
+      private void buildPartial0(com.databricks.api.proto.databricks.Databricks.DatabricksRpcOptions result) {
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000002) != 0)) {
+          result.visibility_ = visibility_;
+          to_bitField0_ |= 0x00000001;
+        }
         if (((from_bitField0_ & 0x00000008) != 0)) {
-          if (rateLimitBuilder_ == null) {
-            result.rateLimit_ = rateLimit_;
-          } else {
-            result.rateLimit_ = rateLimitBuilder_.build();
-          }
+          result.rateLimit_ = rateLimitBuilder_ == null
+              ? rateLimit_
+              : rateLimitBuilder_.build();
           to_bitField0_ |= 0x00000002;
         }
         if (((from_bitField0_ & 0x00000010) != 0)) {
+          result.rpcDocTitle_ = rpcDocTitle_;
           to_bitField0_ |= 0x00000004;
         }
-        result.rpcDocTitle_ = rpcDocTitle_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
+        result.bitField0_ |= to_bitField0_;
       }
 
       @java.lang.Override
@@ -1561,11 +1448,11 @@ public final class Databricks {
           mergeRateLimit(other.getRateLimit());
         }
         if (other.hasRpcDocTitle()) {
-          bitField0_ |= 0x00000010;
           rpcDocTitle_ = other.rpcDocTitle_;
+          bitField0_ |= 0x00000010;
           onChanged();
         }
-        this.mergeUnknownFields(other.unknownFields);
+        this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
       }
@@ -1580,17 +1467,96 @@ public final class Databricks {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.databricks.api.proto.databricks.Databricks.DatabricksRpcOptions parsedMessage = null;
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
         try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 10: {
+                com.databricks.api.proto.databricks.Databricks.HttpEndpoint m =
+                    input.readMessage(
+                        com.databricks.api.proto.databricks.Databricks.HttpEndpoint.PARSER,
+                        extensionRegistry);
+                if (endpointsBuilder_ == null) {
+                  ensureEndpointsIsMutable();
+                  endpoints_.add(m);
+                } else {
+                  endpointsBuilder_.addMessage(m);
+                }
+                break;
+              } // case 10
+              case 16: {
+                int tmpRaw = input.readEnum();
+                com.databricks.api.proto.databricks.Databricks.Visibility tmpValue =
+                    com.databricks.api.proto.databricks.Databricks.Visibility.forNumber(tmpRaw);
+                if (tmpValue == null) {
+                  mergeUnknownVarintField(2, tmpRaw);
+                } else {
+                  visibility_ = tmpRaw;
+                  bitField0_ |= 0x00000002;
+                }
+                break;
+              } // case 16
+              case 24: {
+                int tmpRaw = input.readEnum();
+                com.databricks.api.proto.databricks.Databricks.ErrorCode tmpValue =
+                    com.databricks.api.proto.databricks.Databricks.ErrorCode.forNumber(tmpRaw);
+                if (tmpValue == null) {
+                  mergeUnknownVarintField(3, tmpRaw);
+                } else {
+                  ensureErrorCodesIsMutable();
+                  errorCodes_.add(tmpRaw);
+                }
+                break;
+              } // case 24
+              case 26: {
+                int length = input.readRawVarint32();
+                int oldLimit = input.pushLimit(length);
+                while(input.getBytesUntilLimit() > 0) {
+                  int tmpRaw = input.readEnum();
+                  com.databricks.api.proto.databricks.Databricks.ErrorCode tmpValue =
+                      com.databricks.api.proto.databricks.Databricks.ErrorCode.forNumber(tmpRaw);
+                  if (tmpValue == null) {
+                    mergeUnknownVarintField(3, tmpRaw);
+                  } else {
+                    ensureErrorCodesIsMutable();
+                    errorCodes_.add(tmpRaw);
+                  }
+                }
+                input.popLimit(oldLimit);
+                break;
+              } // case 26
+              case 34: {
+                input.readMessage(
+                    getRateLimitFieldBuilder().getBuilder(),
+                    extensionRegistry);
+                bitField0_ |= 0x00000008;
+                break;
+              } // case 34
+              case 42: {
+                rpcDocTitle_ = input.readBytes();
+                bitField0_ |= 0x00000010;
+                break;
+              } // case 42
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.databricks.api.proto.databricks.Databricks.DatabricksRpcOptions) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
+          onChanged();
+        } // finally
         return this;
       }
       private int bitField0_;
@@ -1857,8 +1823,7 @@ public final class Databricks {
        */
       @java.lang.Override
       public com.databricks.api.proto.databricks.Databricks.Visibility getVisibility() {
-        @SuppressWarnings("deprecation")
-        com.databricks.api.proto.databricks.Databricks.Visibility result = com.databricks.api.proto.databricks.Databricks.Visibility.valueOf(visibility_);
+        com.databricks.api.proto.databricks.Databricks.Visibility result = com.databricks.api.proto.databricks.Databricks.Visibility.forNumber(visibility_);
         return result == null ? com.databricks.api.proto.databricks.Databricks.Visibility.PUBLIC : result;
       }
       /**
@@ -2057,11 +2022,11 @@ public final class Databricks {
             throw new NullPointerException();
           }
           rateLimit_ = value;
-          onChanged();
         } else {
           rateLimitBuilder_.setMessage(value);
         }
         bitField0_ |= 0x00000008;
+        onChanged();
         return this;
       }
       /**
@@ -2075,11 +2040,11 @@ public final class Databricks {
           com.databricks.api.proto.databricks.Databricks.RateLimit.Builder builderForValue) {
         if (rateLimitBuilder_ == null) {
           rateLimit_ = builderForValue.build();
-          onChanged();
         } else {
           rateLimitBuilder_.setMessage(builderForValue.build());
         }
         bitField0_ |= 0x00000008;
+        onChanged();
         return this;
       }
       /**
@@ -2092,18 +2057,17 @@ public final class Databricks {
       public Builder mergeRateLimit(com.databricks.api.proto.databricks.Databricks.RateLimit value) {
         if (rateLimitBuilder_ == null) {
           if (((bitField0_ & 0x00000008) != 0) &&
-              rateLimit_ != null &&
-              rateLimit_ != com.databricks.api.proto.databricks.Databricks.RateLimit.getDefaultInstance()) {
-            rateLimit_ =
-              com.databricks.api.proto.databricks.Databricks.RateLimit.newBuilder(rateLimit_).mergeFrom(value).buildPartial();
+            rateLimit_ != null &&
+            rateLimit_ != com.databricks.api.proto.databricks.Databricks.RateLimit.getDefaultInstance()) {
+            getRateLimitBuilder().mergeFrom(value);
           } else {
             rateLimit_ = value;
           }
-          onChanged();
         } else {
           rateLimitBuilder_.mergeFrom(value);
         }
         bitField0_ |= 0x00000008;
+        onChanged();
         return this;
       }
       /**
@@ -2114,13 +2078,13 @@ public final class Databricks {
        * <code>optional .mlflow.RateLimit rate_limit = 4;</code>
        */
       public Builder clearRateLimit() {
-        if (rateLimitBuilder_ == null) {
-          rateLimit_ = null;
-          onChanged();
-        } else {
-          rateLimitBuilder_.clear();
-        }
         bitField0_ = (bitField0_ & ~0x00000008);
+        rateLimit_ = null;
+        if (rateLimitBuilder_ != null) {
+          rateLimitBuilder_.dispose();
+          rateLimitBuilder_ = null;
+        }
+        onChanged();
         return this;
       }
       /**
@@ -2241,11 +2205,9 @@ public final class Databricks {
        */
       public Builder setRpcDocTitle(
           java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000010;
+        if (value == null) { throw new NullPointerException(); }
         rpcDocTitle_ = value;
+        bitField0_ |= 0x00000010;
         onChanged();
         return this;
       }
@@ -2259,8 +2221,8 @@ public final class Databricks {
        * @return This builder for chaining.
        */
       public Builder clearRpcDocTitle() {
-        bitField0_ = (bitField0_ & ~0x00000010);
         rpcDocTitle_ = getDefaultInstance().getRpcDocTitle();
+        bitField0_ = (bitField0_ & ~0x00000010);
         onChanged();
         return this;
       }
@@ -2276,11 +2238,9 @@ public final class Databricks {
        */
       public Builder setRpcDocTitleBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000010;
+        if (value == null) { throw new NullPointerException(); }
         rpcDocTitle_ = value;
+        bitField0_ |= 0x00000010;
         onChanged();
         return this;
       }
@@ -2317,7 +2277,18 @@ public final class Databricks {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new DatabricksRpcOptions(input, extensionRegistry);
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
       }
     };
 
@@ -2458,69 +2429,6 @@ public final class Databricks {
     getUnknownFields() {
       return this.unknownFields;
     }
-    private HttpEndpoint(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 10: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000001;
-              method_ = bs;
-              break;
-            }
-            case 18: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000002;
-              path_ = bs;
-              break;
-            }
-            case 26: {
-              com.databricks.api.proto.databricks.Databricks.ApiVersion.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000004) != 0)) {
-                subBuilder = since_.toBuilder();
-              }
-              since_ = input.readMessage(com.databricks.api.proto.databricks.Databricks.ApiVersion.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(since_);
-                since_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00000004;
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return com.databricks.api.proto.databricks.Databricks.internal_static_mlflow_HttpEndpoint_descriptor;
@@ -2536,7 +2444,8 @@ public final class Databricks {
 
     private int bitField0_;
     public static final int METHOD_FIELD_NUMBER = 1;
-    private volatile java.lang.Object method_;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object method_ = "POST";
     /**
      * <pre>
      * HTTP method like POST or GET.
@@ -2596,7 +2505,8 @@ public final class Databricks {
     }
 
     public static final int PATH_FIELD_NUMBER = 2;
-    private volatile java.lang.Object path_;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object path_ = "";
     /**
      * <pre>
      * Conceptual path of the API, like "/clusters" or "/clusters/create". Should start with a slash.
@@ -2719,7 +2629,7 @@ public final class Databricks {
       if (((bitField0_ & 0x00000004) != 0)) {
         output.writeMessage(3, getSince());
       }
-      unknownFields.writeTo(output);
+      getUnknownFields().writeTo(output);
     }
 
     @java.lang.Override
@@ -2738,7 +2648,7 @@ public final class Databricks {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(3, getSince());
       }
-      size += unknownFields.getSerializedSize();
+      size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -2768,7 +2678,7 @@ public final class Databricks {
         if (!getSince()
             .equals(other.getSince())) return false;
       }
-      if (!unknownFields.equals(other.unknownFields)) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
 
@@ -2791,7 +2701,7 @@ public final class Databricks {
         hash = (37 * hash) + SINCE_FIELD_NUMBER;
         hash = (53 * hash) + getSince().hashCode();
       }
-      hash = (29 * hash) + unknownFields.hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -2925,16 +2835,14 @@ public final class Databricks {
       @java.lang.Override
       public Builder clear() {
         super.clear();
+        bitField0_ = 0;
         method_ = "POST";
-        bitField0_ = (bitField0_ & ~0x00000001);
         path_ = "";
-        bitField0_ = (bitField0_ & ~0x00000002);
-        if (sinceBuilder_ == null) {
-          since_ = null;
-        } else {
-          sinceBuilder_.clear();
+        since_ = null;
+        if (sinceBuilder_ != null) {
+          sinceBuilder_.dispose();
+          sinceBuilder_ = null;
         }
-        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
 
@@ -2961,27 +2869,29 @@ public final class Databricks {
       @java.lang.Override
       public com.databricks.api.proto.databricks.Databricks.HttpEndpoint buildPartial() {
         com.databricks.api.proto.databricks.Databricks.HttpEndpoint result = new com.databricks.api.proto.databricks.Databricks.HttpEndpoint(this);
+        if (bitField0_ != 0) { buildPartial0(result); }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartial0(com.databricks.api.proto.databricks.Databricks.HttpEndpoint result) {
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.method_ = method_;
           to_bitField0_ |= 0x00000001;
         }
-        result.method_ = method_;
         if (((from_bitField0_ & 0x00000002) != 0)) {
+          result.path_ = path_;
           to_bitField0_ |= 0x00000002;
         }
-        result.path_ = path_;
         if (((from_bitField0_ & 0x00000004) != 0)) {
-          if (sinceBuilder_ == null) {
-            result.since_ = since_;
-          } else {
-            result.since_ = sinceBuilder_.build();
-          }
+          result.since_ = sinceBuilder_ == null
+              ? since_
+              : sinceBuilder_.build();
           to_bitField0_ |= 0x00000004;
         }
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
+        result.bitField0_ |= to_bitField0_;
       }
 
       @java.lang.Override
@@ -3029,19 +2939,19 @@ public final class Databricks {
       public Builder mergeFrom(com.databricks.api.proto.databricks.Databricks.HttpEndpoint other) {
         if (other == com.databricks.api.proto.databricks.Databricks.HttpEndpoint.getDefaultInstance()) return this;
         if (other.hasMethod()) {
-          bitField0_ |= 0x00000001;
           method_ = other.method_;
+          bitField0_ |= 0x00000001;
           onChanged();
         }
         if (other.hasPath()) {
-          bitField0_ |= 0x00000002;
           path_ = other.path_;
+          bitField0_ |= 0x00000002;
           onChanged();
         }
         if (other.hasSince()) {
           mergeSince(other.getSince());
         }
-        this.mergeUnknownFields(other.unknownFields);
+        this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
       }
@@ -3056,17 +2966,47 @@ public final class Databricks {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.databricks.api.proto.databricks.Databricks.HttpEndpoint parsedMessage = null;
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
         try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 10: {
+                method_ = input.readBytes();
+                bitField0_ |= 0x00000001;
+                break;
+              } // case 10
+              case 18: {
+                path_ = input.readBytes();
+                bitField0_ |= 0x00000002;
+                break;
+              } // case 18
+              case 26: {
+                input.readMessage(
+                    getSinceFieldBuilder().getBuilder(),
+                    extensionRegistry);
+                bitField0_ |= 0x00000004;
+                break;
+              } // case 26
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.databricks.api.proto.databricks.Databricks.HttpEndpoint) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
+          onChanged();
+        } // finally
         return this;
       }
       private int bitField0_;
@@ -3137,11 +3077,9 @@ public final class Databricks {
        */
       public Builder setMethod(
           java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
+        if (value == null) { throw new NullPointerException(); }
         method_ = value;
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -3154,8 +3092,8 @@ public final class Databricks {
        * @return This builder for chaining.
        */
       public Builder clearMethod() {
-        bitField0_ = (bitField0_ & ~0x00000001);
         method_ = getDefaultInstance().getMethod();
+        bitField0_ = (bitField0_ & ~0x00000001);
         onChanged();
         return this;
       }
@@ -3170,11 +3108,9 @@ public final class Databricks {
        */
       public Builder setMethodBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
+        if (value == null) { throw new NullPointerException(); }
         method_ = value;
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -3245,11 +3181,9 @@ public final class Databricks {
        */
       public Builder setPath(
           java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
+        if (value == null) { throw new NullPointerException(); }
         path_ = value;
+        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -3262,8 +3196,8 @@ public final class Databricks {
        * @return This builder for chaining.
        */
       public Builder clearPath() {
-        bitField0_ = (bitField0_ & ~0x00000002);
         path_ = getDefaultInstance().getPath();
+        bitField0_ = (bitField0_ & ~0x00000002);
         onChanged();
         return this;
       }
@@ -3278,11 +3212,9 @@ public final class Databricks {
        */
       public Builder setPathBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
+        if (value == null) { throw new NullPointerException(); }
         path_ = value;
+        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -3332,11 +3264,11 @@ public final class Databricks {
             throw new NullPointerException();
           }
           since_ = value;
-          onChanged();
         } else {
           sinceBuilder_.setMessage(value);
         }
         bitField0_ |= 0x00000004;
+        onChanged();
         return this;
       }
       /**
@@ -3351,11 +3283,11 @@ public final class Databricks {
           com.databricks.api.proto.databricks.Databricks.ApiVersion.Builder builderForValue) {
         if (sinceBuilder_ == null) {
           since_ = builderForValue.build();
-          onChanged();
         } else {
           sinceBuilder_.setMessage(builderForValue.build());
         }
         bitField0_ |= 0x00000004;
+        onChanged();
         return this;
       }
       /**
@@ -3369,18 +3301,17 @@ public final class Databricks {
       public Builder mergeSince(com.databricks.api.proto.databricks.Databricks.ApiVersion value) {
         if (sinceBuilder_ == null) {
           if (((bitField0_ & 0x00000004) != 0) &&
-              since_ != null &&
-              since_ != com.databricks.api.proto.databricks.Databricks.ApiVersion.getDefaultInstance()) {
-            since_ =
-              com.databricks.api.proto.databricks.Databricks.ApiVersion.newBuilder(since_).mergeFrom(value).buildPartial();
+            since_ != null &&
+            since_ != com.databricks.api.proto.databricks.Databricks.ApiVersion.getDefaultInstance()) {
+            getSinceBuilder().mergeFrom(value);
           } else {
             since_ = value;
           }
-          onChanged();
         } else {
           sinceBuilder_.mergeFrom(value);
         }
         bitField0_ |= 0x00000004;
+        onChanged();
         return this;
       }
       /**
@@ -3392,13 +3323,13 @@ public final class Databricks {
        * <code>optional .mlflow.ApiVersion since = 3;</code>
        */
       public Builder clearSince() {
-        if (sinceBuilder_ == null) {
-          since_ = null;
-          onChanged();
-        } else {
-          sinceBuilder_.clear();
-        }
         bitField0_ = (bitField0_ & ~0x00000004);
+        since_ = null;
+        if (sinceBuilder_ != null) {
+          sinceBuilder_.dispose();
+          sinceBuilder_ = null;
+        }
+        onChanged();
         return this;
       }
       /**
@@ -3484,7 +3415,18 @@ public final class Databricks {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new HttpEndpoint(input, extensionRegistry);
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
       }
     };
 
@@ -3557,54 +3499,6 @@ public final class Databricks {
     getUnknownFields() {
       return this.unknownFields;
     }
-    private ApiVersion(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 8: {
-              bitField0_ |= 0x00000001;
-              major_ = input.readInt32();
-              break;
-            }
-            case 16: {
-              bitField0_ |= 0x00000002;
-              minor_ = input.readInt32();
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return com.databricks.api.proto.databricks.Databricks.internal_static_mlflow_ApiVersion_descriptor;
@@ -3620,7 +3514,7 @@ public final class Databricks {
 
     private int bitField0_;
     public static final int MAJOR_FIELD_NUMBER = 1;
-    private int major_;
+    private int major_ = 0;
     /**
      * <code>optional int32 major = 1;</code>
      * @return Whether the major field is set.
@@ -3639,7 +3533,7 @@ public final class Databricks {
     }
 
     public static final int MINOR_FIELD_NUMBER = 2;
-    private int minor_;
+    private int minor_ = 0;
     /**
      * <code>optional int32 minor = 2;</code>
      * @return Whether the minor field is set.
@@ -3677,7 +3571,7 @@ public final class Databricks {
       if (((bitField0_ & 0x00000002) != 0)) {
         output.writeInt32(2, minor_);
       }
-      unknownFields.writeTo(output);
+      getUnknownFields().writeTo(output);
     }
 
     @java.lang.Override
@@ -3694,7 +3588,7 @@ public final class Databricks {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(2, minor_);
       }
-      size += unknownFields.getSerializedSize();
+      size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -3719,7 +3613,7 @@ public final class Databricks {
         if (getMinor()
             != other.getMinor()) return false;
       }
-      if (!unknownFields.equals(other.unknownFields)) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
 
@@ -3738,7 +3632,7 @@ public final class Databricks {
         hash = (37 * hash) + MINOR_FIELD_NUMBER;
         hash = (53 * hash) + getMinor();
       }
-      hash = (29 * hash) + unknownFields.hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -3855,26 +3749,20 @@ public final class Databricks {
 
       // Construct using com.databricks.api.proto.databricks.Databricks.ApiVersion.newBuilder()
       private Builder() {
-        maybeForceBuilderInitialization();
+
       }
 
       private Builder(
           com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
+
       }
       @java.lang.Override
       public Builder clear() {
         super.clear();
+        bitField0_ = 0;
         major_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000001);
         minor_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
 
@@ -3901,6 +3789,12 @@ public final class Databricks {
       @java.lang.Override
       public com.databricks.api.proto.databricks.Databricks.ApiVersion buildPartial() {
         com.databricks.api.proto.databricks.Databricks.ApiVersion result = new com.databricks.api.proto.databricks.Databricks.ApiVersion(this);
+        if (bitField0_ != 0) { buildPartial0(result); }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartial0(com.databricks.api.proto.databricks.Databricks.ApiVersion result) {
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) != 0)) {
@@ -3911,9 +3805,7 @@ public final class Databricks {
           result.minor_ = minor_;
           to_bitField0_ |= 0x00000002;
         }
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
+        result.bitField0_ |= to_bitField0_;
       }
 
       @java.lang.Override
@@ -3966,7 +3858,7 @@ public final class Databricks {
         if (other.hasMinor()) {
           setMinor(other.getMinor());
         }
-        this.mergeUnknownFields(other.unknownFields);
+        this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
       }
@@ -3981,17 +3873,40 @@ public final class Databricks {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.databricks.api.proto.databricks.Databricks.ApiVersion parsedMessage = null;
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
         try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 8: {
+                major_ = input.readInt32();
+                bitField0_ |= 0x00000001;
+                break;
+              } // case 8
+              case 16: {
+                minor_ = input.readInt32();
+                bitField0_ |= 0x00000002;
+                break;
+              } // case 16
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.databricks.api.proto.databricks.Databricks.ApiVersion) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
+          onChanged();
+        } // finally
         return this;
       }
       private int bitField0_;
@@ -4019,8 +3934,9 @@ public final class Databricks {
        * @return This builder for chaining.
        */
       public Builder setMajor(int value) {
-        bitField0_ |= 0x00000001;
+        
         major_ = value;
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -4058,8 +3974,9 @@ public final class Databricks {
        * @return This builder for chaining.
        */
       public Builder setMinor(int value) {
-        bitField0_ |= 0x00000002;
+        
         minor_ = value;
+        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -4106,7 +4023,18 @@ public final class Databricks {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new ApiVersion(input, extensionRegistry);
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
       }
     };
 
@@ -4204,54 +4132,6 @@ public final class Databricks {
     getUnknownFields() {
       return this.unknownFields;
     }
-    private RateLimit(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 8: {
-              bitField0_ |= 0x00000001;
-              maxBurst_ = input.readInt64();
-              break;
-            }
-            case 16: {
-              bitField0_ |= 0x00000002;
-              maxSustainedPerSecond_ = input.readInt64();
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return com.databricks.api.proto.databricks.Databricks.internal_static_mlflow_RateLimit_descriptor;
@@ -4267,7 +4147,7 @@ public final class Databricks {
 
     private int bitField0_;
     public static final int MAX_BURST_FIELD_NUMBER = 1;
-    private long maxBurst_;
+    private long maxBurst_ = 0L;
     /**
      * <pre>
      * The maximum burst of API requests allowed for a single endpoint. In the context of the
@@ -4296,7 +4176,7 @@ public final class Databricks {
     }
 
     public static final int MAX_SUSTAINED_PER_SECOND_FIELD_NUMBER = 2;
-    private long maxSustainedPerSecond_;
+    private long maxSustainedPerSecond_ = 0L;
     /**
      * <pre>
      * The maximum sustained request per second limit for a single endpoint. In the context of the,
@@ -4344,7 +4224,7 @@ public final class Databricks {
       if (((bitField0_ & 0x00000002) != 0)) {
         output.writeInt64(2, maxSustainedPerSecond_);
       }
-      unknownFields.writeTo(output);
+      getUnknownFields().writeTo(output);
     }
 
     @java.lang.Override
@@ -4361,7 +4241,7 @@ public final class Databricks {
         size += com.google.protobuf.CodedOutputStream
           .computeInt64Size(2, maxSustainedPerSecond_);
       }
-      size += unknownFields.getSerializedSize();
+      size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -4386,7 +4266,7 @@ public final class Databricks {
         if (getMaxSustainedPerSecond()
             != other.getMaxSustainedPerSecond()) return false;
       }
-      if (!unknownFields.equals(other.unknownFields)) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
 
@@ -4407,7 +4287,7 @@ public final class Databricks {
         hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
             getMaxSustainedPerSecond());
       }
-      hash = (29 * hash) + unknownFields.hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -4529,26 +4409,20 @@ public final class Databricks {
 
       // Construct using com.databricks.api.proto.databricks.Databricks.RateLimit.newBuilder()
       private Builder() {
-        maybeForceBuilderInitialization();
+
       }
 
       private Builder(
           com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
+
       }
       @java.lang.Override
       public Builder clear() {
         super.clear();
+        bitField0_ = 0;
         maxBurst_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000001);
         maxSustainedPerSecond_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
 
@@ -4575,6 +4449,12 @@ public final class Databricks {
       @java.lang.Override
       public com.databricks.api.proto.databricks.Databricks.RateLimit buildPartial() {
         com.databricks.api.proto.databricks.Databricks.RateLimit result = new com.databricks.api.proto.databricks.Databricks.RateLimit(this);
+        if (bitField0_ != 0) { buildPartial0(result); }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartial0(com.databricks.api.proto.databricks.Databricks.RateLimit result) {
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) != 0)) {
@@ -4585,9 +4465,7 @@ public final class Databricks {
           result.maxSustainedPerSecond_ = maxSustainedPerSecond_;
           to_bitField0_ |= 0x00000002;
         }
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
+        result.bitField0_ |= to_bitField0_;
       }
 
       @java.lang.Override
@@ -4640,7 +4518,7 @@ public final class Databricks {
         if (other.hasMaxSustainedPerSecond()) {
           setMaxSustainedPerSecond(other.getMaxSustainedPerSecond());
         }
-        this.mergeUnknownFields(other.unknownFields);
+        this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
       }
@@ -4655,17 +4533,40 @@ public final class Databricks {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.databricks.api.proto.databricks.Databricks.RateLimit parsedMessage = null;
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
         try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 8: {
+                maxBurst_ = input.readInt64();
+                bitField0_ |= 0x00000001;
+                break;
+              } // case 8
+              case 16: {
+                maxSustainedPerSecond_ = input.readInt64();
+                bitField0_ |= 0x00000002;
+                break;
+              } // case 16
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.databricks.api.proto.databricks.Databricks.RateLimit) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
+          onChanged();
+        } // finally
         return this;
       }
       private int bitField0_;
@@ -4708,8 +4609,9 @@ public final class Databricks {
        * @return This builder for chaining.
        */
       public Builder setMaxBurst(long value) {
-        bitField0_ |= 0x00000001;
+        
         maxBurst_ = value;
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -4767,8 +4669,9 @@ public final class Databricks {
        * @return This builder for chaining.
        */
       public Builder setMaxSustainedPerSecond(long value) {
-        bitField0_ |= 0x00000002;
+        
         maxSustainedPerSecond_ = value;
+        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -4820,7 +4723,18 @@ public final class Databricks {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new RateLimit(input, extensionRegistry);
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
       }
     };
 
@@ -5040,85 +4954,6 @@ public final class Databricks {
     getUnknownFields() {
       return this.unknownFields;
     }
-    private DocumentationMetadata(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 10: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000001;
-              docstring_ = bs;
-              break;
-            }
-            case 18: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000002;
-              leadDoc_ = bs;
-              break;
-            }
-            case 24: {
-              int rawValue = input.readEnum();
-                @SuppressWarnings("deprecation")
-              com.databricks.api.proto.databricks.Databricks.Visibility value = com.databricks.api.proto.databricks.Databricks.Visibility.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(3, rawValue);
-              } else {
-                bitField0_ |= 0x00000004;
-                visibility_ = rawValue;
-              }
-              break;
-            }
-            case 34: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              if (!((mutable_bitField0_ & 0x00000008) != 0)) {
-                originalProtoPath_ = new com.google.protobuf.LazyStringArrayList();
-                mutable_bitField0_ |= 0x00000008;
-              }
-              originalProtoPath_.add(bs);
-              break;
-            }
-            case 40: {
-              bitField0_ |= 0x00000008;
-              position_ = input.readInt32();
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000008) != 0)) {
-          originalProtoPath_ = originalProtoPath_.getUnmodifiableView();
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return com.databricks.api.proto.databricks.Databricks.internal_static_mlflow_DocumentationMetadata_descriptor;
@@ -5134,7 +4969,8 @@ public final class Databricks {
 
     private int bitField0_;
     public static final int DOCSTRING_FIELD_NUMBER = 1;
-    private volatile java.lang.Object docstring_;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object docstring_ = "";
     /**
      * <pre>
      * The string of documentation attached to this particular item.
@@ -5194,7 +5030,8 @@ public final class Databricks {
     }
 
     public static final int LEAD_DOC_FIELD_NUMBER = 2;
-    private volatile java.lang.Object leadDoc_;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object leadDoc_ = "";
     /**
      * <pre>
      * The string of documentation that is *before* this item. This only makes sense for top-level
@@ -5260,7 +5097,7 @@ public final class Databricks {
     }
 
     public static final int VISIBILITY_FIELD_NUMBER = 3;
-    private int visibility_;
+    private int visibility_ = 1;
     /**
      * <pre>
      * The visibility level when the docstring was generated.
@@ -5285,12 +5122,12 @@ public final class Databricks {
      * @return The visibility.
      */
     @java.lang.Override public com.databricks.api.proto.databricks.Databricks.Visibility getVisibility() {
-      @SuppressWarnings("deprecation")
-      com.databricks.api.proto.databricks.Databricks.Visibility result = com.databricks.api.proto.databricks.Databricks.Visibility.valueOf(visibility_);
+      com.databricks.api.proto.databricks.Databricks.Visibility result = com.databricks.api.proto.databricks.Databricks.Visibility.forNumber(visibility_);
       return result == null ? com.databricks.api.proto.databricks.Databricks.Visibility.PUBLIC : result;
     }
 
     public static final int ORIGINAL_PROTO_PATH_FIELD_NUMBER = 4;
+    @SuppressWarnings("serial")
     private com.google.protobuf.LazyStringList originalProtoPath_;
     /**
      * <pre>
@@ -5354,7 +5191,7 @@ public final class Databricks {
     }
 
     public static final int POSITION_FIELD_NUMBER = 5;
-    private int position_;
+    private int position_ = 0;
     /**
      * <pre>
      * The location (line number) of the start of the documentation. This is required to keep the
@@ -5411,7 +5248,7 @@ public final class Databricks {
       if (((bitField0_ & 0x00000008) != 0)) {
         output.writeInt32(5, position_);
       }
-      unknownFields.writeTo(output);
+      getUnknownFields().writeTo(output);
     }
 
     @java.lang.Override
@@ -5442,7 +5279,7 @@ public final class Databricks {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(5, position_);
       }
-      size += unknownFields.getSerializedSize();
+      size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -5478,7 +5315,7 @@ public final class Databricks {
         if (getPosition()
             != other.getPosition()) return false;
       }
-      if (!unknownFields.equals(other.unknownFields)) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
 
@@ -5509,7 +5346,7 @@ public final class Databricks {
         hash = (37 * hash) + POSITION_FIELD_NUMBER;
         hash = (53 * hash) + getPosition();
       }
-      hash = (29 * hash) + unknownFields.hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -5630,32 +5467,24 @@ public final class Databricks {
 
       // Construct using com.databricks.api.proto.databricks.Databricks.DocumentationMetadata.newBuilder()
       private Builder() {
-        maybeForceBuilderInitialization();
+
       }
 
       private Builder(
           com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
+
       }
       @java.lang.Override
       public Builder clear() {
         super.clear();
+        bitField0_ = 0;
         docstring_ = "";
-        bitField0_ = (bitField0_ & ~0x00000001);
         leadDoc_ = "";
-        bitField0_ = (bitField0_ & ~0x00000002);
         visibility_ = 1;
-        bitField0_ = (bitField0_ & ~0x00000004);
         originalProtoPath_ = com.google.protobuf.LazyStringArrayList.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000008);
         position_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
 
@@ -5682,32 +5511,40 @@ public final class Databricks {
       @java.lang.Override
       public com.databricks.api.proto.databricks.Databricks.DocumentationMetadata buildPartial() {
         com.databricks.api.proto.databricks.Databricks.DocumentationMetadata result = new com.databricks.api.proto.databricks.Databricks.DocumentationMetadata(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) != 0)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.docstring_ = docstring_;
-        if (((from_bitField0_ & 0x00000002) != 0)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.leadDoc_ = leadDoc_;
-        if (((from_bitField0_ & 0x00000004) != 0)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.visibility_ = visibility_;
+        buildPartialRepeatedFields(result);
+        if (bitField0_ != 0) { buildPartial0(result); }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartialRepeatedFields(com.databricks.api.proto.databricks.Databricks.DocumentationMetadata result) {
         if (((bitField0_ & 0x00000008) != 0)) {
           originalProtoPath_ = originalProtoPath_.getUnmodifiableView();
           bitField0_ = (bitField0_ & ~0x00000008);
         }
         result.originalProtoPath_ = originalProtoPath_;
+      }
+
+      private void buildPartial0(com.databricks.api.proto.databricks.Databricks.DocumentationMetadata result) {
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.docstring_ = docstring_;
+          to_bitField0_ |= 0x00000001;
+        }
+        if (((from_bitField0_ & 0x00000002) != 0)) {
+          result.leadDoc_ = leadDoc_;
+          to_bitField0_ |= 0x00000002;
+        }
+        if (((from_bitField0_ & 0x00000004) != 0)) {
+          result.visibility_ = visibility_;
+          to_bitField0_ |= 0x00000004;
+        }
         if (((from_bitField0_ & 0x00000010) != 0)) {
           result.position_ = position_;
           to_bitField0_ |= 0x00000008;
         }
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
+        result.bitField0_ |= to_bitField0_;
       }
 
       @java.lang.Override
@@ -5755,13 +5592,13 @@ public final class Databricks {
       public Builder mergeFrom(com.databricks.api.proto.databricks.Databricks.DocumentationMetadata other) {
         if (other == com.databricks.api.proto.databricks.Databricks.DocumentationMetadata.getDefaultInstance()) return this;
         if (other.hasDocstring()) {
-          bitField0_ |= 0x00000001;
           docstring_ = other.docstring_;
+          bitField0_ |= 0x00000001;
           onChanged();
         }
         if (other.hasLeadDoc()) {
-          bitField0_ |= 0x00000002;
           leadDoc_ = other.leadDoc_;
+          bitField0_ |= 0x00000002;
           onChanged();
         }
         if (other.hasVisibility()) {
@@ -5780,7 +5617,7 @@ public final class Databricks {
         if (other.hasPosition()) {
           setPosition(other.getPosition());
         }
-        this.mergeUnknownFields(other.unknownFields);
+        this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
       }
@@ -5795,17 +5632,63 @@ public final class Databricks {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.databricks.api.proto.databricks.Databricks.DocumentationMetadata parsedMessage = null;
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
         try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 10: {
+                docstring_ = input.readBytes();
+                bitField0_ |= 0x00000001;
+                break;
+              } // case 10
+              case 18: {
+                leadDoc_ = input.readBytes();
+                bitField0_ |= 0x00000002;
+                break;
+              } // case 18
+              case 24: {
+                int tmpRaw = input.readEnum();
+                com.databricks.api.proto.databricks.Databricks.Visibility tmpValue =
+                    com.databricks.api.proto.databricks.Databricks.Visibility.forNumber(tmpRaw);
+                if (tmpValue == null) {
+                  mergeUnknownVarintField(3, tmpRaw);
+                } else {
+                  visibility_ = tmpRaw;
+                  bitField0_ |= 0x00000004;
+                }
+                break;
+              } // case 24
+              case 34: {
+                com.google.protobuf.ByteString bs = input.readBytes();
+                ensureOriginalProtoPathIsMutable();
+                originalProtoPath_.add(bs);
+                break;
+              } // case 34
+              case 40: {
+                position_ = input.readInt32();
+                bitField0_ |= 0x00000010;
+                break;
+              } // case 40
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.databricks.api.proto.databricks.Databricks.DocumentationMetadata) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
+          onChanged();
+        } // finally
         return this;
       }
       private int bitField0_;
@@ -5876,11 +5759,9 @@ public final class Databricks {
        */
       public Builder setDocstring(
           java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
+        if (value == null) { throw new NullPointerException(); }
         docstring_ = value;
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -5893,8 +5774,8 @@ public final class Databricks {
        * @return This builder for chaining.
        */
       public Builder clearDocstring() {
-        bitField0_ = (bitField0_ & ~0x00000001);
         docstring_ = getDefaultInstance().getDocstring();
+        bitField0_ = (bitField0_ & ~0x00000001);
         onChanged();
         return this;
       }
@@ -5909,11 +5790,9 @@ public final class Databricks {
        */
       public Builder setDocstringBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
+        if (value == null) { throw new NullPointerException(); }
         docstring_ = value;
+        bitField0_ |= 0x00000001;
         onChanged();
         return this;
       }
@@ -5992,11 +5871,9 @@ public final class Databricks {
        */
       public Builder setLeadDoc(
           java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
+        if (value == null) { throw new NullPointerException(); }
         leadDoc_ = value;
+        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -6011,8 +5888,8 @@ public final class Databricks {
        * @return This builder for chaining.
        */
       public Builder clearLeadDoc() {
-        bitField0_ = (bitField0_ & ~0x00000002);
         leadDoc_ = getDefaultInstance().getLeadDoc();
+        bitField0_ = (bitField0_ & ~0x00000002);
         onChanged();
         return this;
       }
@@ -6029,11 +5906,9 @@ public final class Databricks {
        */
       public Builder setLeadDocBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
+        if (value == null) { throw new NullPointerException(); }
         leadDoc_ = value;
+        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -6064,8 +5939,7 @@ public final class Databricks {
        */
       @java.lang.Override
       public com.databricks.api.proto.databricks.Databricks.Visibility getVisibility() {
-        @SuppressWarnings("deprecation")
-        com.databricks.api.proto.databricks.Databricks.Visibility result = com.databricks.api.proto.databricks.Databricks.Visibility.valueOf(visibility_);
+        com.databricks.api.proto.databricks.Databricks.Visibility result = com.databricks.api.proto.databricks.Databricks.Visibility.forNumber(visibility_);
         return result == null ? com.databricks.api.proto.databricks.Databricks.Visibility.PUBLIC : result;
       }
       /**
@@ -6187,10 +6061,8 @@ public final class Databricks {
        */
       public Builder setOriginalProtoPath(
           int index, java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureOriginalProtoPathIsMutable();
+        if (value == null) { throw new NullPointerException(); }
+        ensureOriginalProtoPathIsMutable();
         originalProtoPath_.set(index, value);
         onChanged();
         return this;
@@ -6209,10 +6081,8 @@ public final class Databricks {
        */
       public Builder addOriginalProtoPath(
           java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureOriginalProtoPathIsMutable();
+        if (value == null) { throw new NullPointerException(); }
+        ensureOriginalProtoPathIsMutable();
         originalProtoPath_.add(value);
         onChanged();
         return this;
@@ -6268,10 +6138,8 @@ public final class Databricks {
        */
       public Builder addOriginalProtoPathBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureOriginalProtoPathIsMutable();
+        if (value == null) { throw new NullPointerException(); }
+        ensureOriginalProtoPathIsMutable();
         originalProtoPath_.add(value);
         onChanged();
         return this;
@@ -6315,8 +6183,9 @@ public final class Databricks {
        * @return This builder for chaining.
        */
       public Builder setPosition(int value) {
-        bitField0_ |= 0x00000010;
+        
         position_ = value;
+        bitField0_ |= 0x00000010;
         onChanged();
         return this;
       }
@@ -6368,7 +6237,18 @@ public final class Databricks {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new DocumentationMetadata(input, extensionRegistry);
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
       }
     };
 
@@ -6471,68 +6351,6 @@ public final class Databricks {
     getUnknownFields() {
       return this.unknownFields;
     }
-    private DatabricksServiceExceptionProto(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new java.lang.NullPointerException();
-      }
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 8: {
-              int rawValue = input.readEnum();
-                @SuppressWarnings("deprecation")
-              com.databricks.api.proto.databricks.Databricks.ErrorCode value = com.databricks.api.proto.databricks.Databricks.ErrorCode.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(1, rawValue);
-              } else {
-                bitField0_ |= 0x00000001;
-                errorCode_ = rawValue;
-              }
-              break;
-            }
-            case 18: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000002;
-              message_ = bs;
-              break;
-            }
-            case 26: {
-              com.google.protobuf.ByteString bs = input.readBytes();
-              bitField0_ |= 0x00000004;
-              stackTrace_ = bs;
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return com.databricks.api.proto.databricks.Databricks.internal_static_mlflow_DatabricksServiceExceptionProto_descriptor;
@@ -6548,7 +6366,7 @@ public final class Databricks {
 
     private int bitField0_;
     public static final int ERROR_CODE_FIELD_NUMBER = 1;
-    private int errorCode_;
+    private int errorCode_ = 1;
     /**
      * <code>optional .mlflow.ErrorCode error_code = 1;</code>
      * @return Whether the errorCode field is set.
@@ -6561,13 +6379,13 @@ public final class Databricks {
      * @return The errorCode.
      */
     @java.lang.Override public com.databricks.api.proto.databricks.Databricks.ErrorCode getErrorCode() {
-      @SuppressWarnings("deprecation")
-      com.databricks.api.proto.databricks.Databricks.ErrorCode result = com.databricks.api.proto.databricks.Databricks.ErrorCode.valueOf(errorCode_);
+      com.databricks.api.proto.databricks.Databricks.ErrorCode result = com.databricks.api.proto.databricks.Databricks.ErrorCode.forNumber(errorCode_);
       return result == null ? com.databricks.api.proto.databricks.Databricks.ErrorCode.INTERNAL_ERROR : result;
     }
 
     public static final int MESSAGE_FIELD_NUMBER = 2;
-    private volatile java.lang.Object message_;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object message_ = "";
     /**
      * <code>optional string message = 2;</code>
      * @return Whether the message field is set.
@@ -6615,7 +6433,8 @@ public final class Databricks {
     }
 
     public static final int STACK_TRACE_FIELD_NUMBER = 3;
-    private volatile java.lang.Object stackTrace_;
+    @SuppressWarnings("serial")
+    private volatile java.lang.Object stackTrace_ = "";
     /**
      * <code>optional string stack_trace = 3;</code>
      * @return Whether the stackTrace field is set.
@@ -6685,7 +6504,7 @@ public final class Databricks {
       if (((bitField0_ & 0x00000004) != 0)) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 3, stackTrace_);
       }
-      unknownFields.writeTo(output);
+      getUnknownFields().writeTo(output);
     }
 
     @java.lang.Override
@@ -6704,7 +6523,7 @@ public final class Databricks {
       if (((bitField0_ & 0x00000004) != 0)) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, stackTrace_);
       }
-      size += unknownFields.getSerializedSize();
+      size += getUnknownFields().getSerializedSize();
       memoizedSize = size;
       return size;
     }
@@ -6733,7 +6552,7 @@ public final class Databricks {
         if (!getStackTrace()
             .equals(other.getStackTrace())) return false;
       }
-      if (!unknownFields.equals(other.unknownFields)) return false;
+      if (!getUnknownFields().equals(other.getUnknownFields())) return false;
       return true;
     }
 
@@ -6756,7 +6575,7 @@ public final class Databricks {
         hash = (37 * hash) + STACK_TRACE_FIELD_NUMBER;
         hash = (53 * hash) + getStackTrace().hashCode();
       }
-      hash = (29 * hash) + unknownFields.hashCode();
+      hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
       return hash;
     }
@@ -6877,28 +6696,21 @@ public final class Databricks {
 
       // Construct using com.databricks.api.proto.databricks.Databricks.DatabricksServiceExceptionProto.newBuilder()
       private Builder() {
-        maybeForceBuilderInitialization();
+
       }
 
       private Builder(
           com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
+
       }
       @java.lang.Override
       public Builder clear() {
         super.clear();
+        bitField0_ = 0;
         errorCode_ = 1;
-        bitField0_ = (bitField0_ & ~0x00000001);
         message_ = "";
-        bitField0_ = (bitField0_ & ~0x00000002);
         stackTrace_ = "";
-        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
 
@@ -6925,23 +6737,27 @@ public final class Databricks {
       @java.lang.Override
       public com.databricks.api.proto.databricks.Databricks.DatabricksServiceExceptionProto buildPartial() {
         com.databricks.api.proto.databricks.Databricks.DatabricksServiceExceptionProto result = new com.databricks.api.proto.databricks.Databricks.DatabricksServiceExceptionProto(this);
+        if (bitField0_ != 0) { buildPartial0(result); }
+        onBuilt();
+        return result;
+      }
+
+      private void buildPartial0(com.databricks.api.proto.databricks.Databricks.DatabricksServiceExceptionProto result) {
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) != 0)) {
+          result.errorCode_ = errorCode_;
           to_bitField0_ |= 0x00000001;
         }
-        result.errorCode_ = errorCode_;
         if (((from_bitField0_ & 0x00000002) != 0)) {
+          result.message_ = message_;
           to_bitField0_ |= 0x00000002;
         }
-        result.message_ = message_;
         if (((from_bitField0_ & 0x00000004) != 0)) {
+          result.stackTrace_ = stackTrace_;
           to_bitField0_ |= 0x00000004;
         }
-        result.stackTrace_ = stackTrace_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
+        result.bitField0_ |= to_bitField0_;
       }
 
       @java.lang.Override
@@ -6992,16 +6808,16 @@ public final class Databricks {
           setErrorCode(other.getErrorCode());
         }
         if (other.hasMessage()) {
-          bitField0_ |= 0x00000002;
           message_ = other.message_;
+          bitField0_ |= 0x00000002;
           onChanged();
         }
         if (other.hasStackTrace()) {
-          bitField0_ |= 0x00000004;
           stackTrace_ = other.stackTrace_;
+          bitField0_ |= 0x00000004;
           onChanged();
         }
-        this.mergeUnknownFields(other.unknownFields);
+        this.mergeUnknownFields(other.getUnknownFields());
         onChanged();
         return this;
       }
@@ -7016,17 +6832,52 @@ public final class Databricks {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.databricks.api.proto.databricks.Databricks.DatabricksServiceExceptionProto parsedMessage = null;
+        if (extensionRegistry == null) {
+          throw new java.lang.NullPointerException();
+        }
         try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+          boolean done = false;
+          while (!done) {
+            int tag = input.readTag();
+            switch (tag) {
+              case 0:
+                done = true;
+                break;
+              case 8: {
+                int tmpRaw = input.readEnum();
+                com.databricks.api.proto.databricks.Databricks.ErrorCode tmpValue =
+                    com.databricks.api.proto.databricks.Databricks.ErrorCode.forNumber(tmpRaw);
+                if (tmpValue == null) {
+                  mergeUnknownVarintField(1, tmpRaw);
+                } else {
+                  errorCode_ = tmpRaw;
+                  bitField0_ |= 0x00000001;
+                }
+                break;
+              } // case 8
+              case 18: {
+                message_ = input.readBytes();
+                bitField0_ |= 0x00000002;
+                break;
+              } // case 18
+              case 26: {
+                stackTrace_ = input.readBytes();
+                bitField0_ |= 0x00000004;
+                break;
+              } // case 26
+              default: {
+                if (!super.parseUnknownField(input, extensionRegistry, tag)) {
+                  done = true; // was an endgroup tag
+                }
+                break;
+              } // default:
+            } // switch (tag)
+          } // while (!done)
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.databricks.api.proto.databricks.Databricks.DatabricksServiceExceptionProto) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
+          onChanged();
+        } // finally
         return this;
       }
       private int bitField0_;
@@ -7045,8 +6896,7 @@ public final class Databricks {
        */
       @java.lang.Override
       public com.databricks.api.proto.databricks.Databricks.ErrorCode getErrorCode() {
-        @SuppressWarnings("deprecation")
-        com.databricks.api.proto.databricks.Databricks.ErrorCode result = com.databricks.api.proto.databricks.Databricks.ErrorCode.valueOf(errorCode_);
+        com.databricks.api.proto.databricks.Databricks.ErrorCode result = com.databricks.api.proto.databricks.Databricks.ErrorCode.forNumber(errorCode_);
         return result == null ? com.databricks.api.proto.databricks.Databricks.ErrorCode.INTERNAL_ERROR : result;
       }
       /**
@@ -7124,11 +6974,9 @@ public final class Databricks {
        */
       public Builder setMessage(
           java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
+        if (value == null) { throw new NullPointerException(); }
         message_ = value;
+        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -7137,8 +6985,8 @@ public final class Databricks {
        * @return This builder for chaining.
        */
       public Builder clearMessage() {
-        bitField0_ = (bitField0_ & ~0x00000002);
         message_ = getDefaultInstance().getMessage();
+        bitField0_ = (bitField0_ & ~0x00000002);
         onChanged();
         return this;
       }
@@ -7149,11 +6997,9 @@ public final class Databricks {
        */
       public Builder setMessageBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
+        if (value == null) { throw new NullPointerException(); }
         message_ = value;
+        bitField0_ |= 0x00000002;
         onChanged();
         return this;
       }
@@ -7208,11 +7054,9 @@ public final class Databricks {
        */
       public Builder setStackTrace(
           java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
+        if (value == null) { throw new NullPointerException(); }
         stackTrace_ = value;
+        bitField0_ |= 0x00000004;
         onChanged();
         return this;
       }
@@ -7221,8 +7065,8 @@ public final class Databricks {
        * @return This builder for chaining.
        */
       public Builder clearStackTrace() {
-        bitField0_ = (bitField0_ & ~0x00000004);
         stackTrace_ = getDefaultInstance().getStackTrace();
+        bitField0_ = (bitField0_ & ~0x00000004);
         onChanged();
         return this;
       }
@@ -7233,11 +7077,9 @@ public final class Databricks {
        */
       public Builder setStackTraceBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
+        if (value == null) { throw new NullPointerException(); }
         stackTrace_ = value;
+        bitField0_ |= 0x00000004;
         onChanged();
         return this;
       }
@@ -7274,7 +7116,18 @@ public final class Databricks {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new DatabricksServiceExceptionProto(input, extensionRegistry);
+        Builder builder = newBuilder();
+        try {
+          builder.mergeFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          throw e.setUnfinishedMessage(builder.buildPartial());
+        } catch (com.google.protobuf.UninitializedMessageException e) {
+          throw e.asInvalidProtocolBufferException().setUnfinishedMessage(builder.buildPartial());
+        } catch (java.io.IOException e) {
+          throw new com.google.protobuf.InvalidProtocolBufferException(e)
+              .setUnfinishedMessage(builder.buildPartial());
+        }
+        return builder.buildPartial();
       }
     };
 

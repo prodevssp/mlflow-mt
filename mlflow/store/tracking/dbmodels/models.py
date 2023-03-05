@@ -23,6 +23,7 @@ from mlflow.entities import (
     Run,
     ViewType,
     ExperimentTag,
+    TeamExperimentDetails
 )
 from mlflow.entities.lifecycle_stage import LifecycleStage
 from mlflow.store.db.base_sql_model import Base
@@ -82,7 +83,7 @@ class SqlExperiment(Base):
     def __repr__(self):
         return "<SqlExperiment ({}, {})>".format(self.experiment_id, self.name)
 
-    def to_mlflow_entity(self):
+    def to_mlflow_entity(self, team_id=None):
         """
         Convert DB model to corresponding MLflow entity.
 
@@ -94,6 +95,7 @@ class SqlExperiment(Base):
             artifact_location=self.artifact_location,
             lifecycle_stage=self.lifecycle_stage,
             tags=[t.to_mlflow_entity() for t in self.tags],
+            team_id=team_id
         )
 
 
@@ -433,3 +435,54 @@ class SqlParam(Base):
         :return: :py:class:`mlflow.entities.Param`.
         """
         return Param(key=self.key, value=self.value)
+
+
+class SqlTeamExperimentDetails(Base):
+    """
+    DB model for :py:class:`mlflow.entities.TeamExperimentDetails`.
+    These are recorded in ``team_experiment_details`` table.
+    """
+
+    __tablename__ = "team_experiment_details"
+
+    id = Column(Integer, nullable=False, autoincrement=True)
+    """
+    row id: `Integer`. *Primary Key* for ``team_experiment_details`` table.
+    """
+    team_id = Column(String(50), nullable=True)
+    """
+    team_id: `String (limit 50 characters). Cannot be null`
+    """
+    experiment_id = Column(Integer, nullable=True)
+    """
+    experiment_id: `String (limit 50 characters). Cannot be null`
+    """
+    model_name = Column(String(50), nullable=True)
+    """
+    model_name: `String (limit 50 characters). Can be null`
+    """
+    version = Column(Integer, nullable=True)
+    """
+    version: `Integer. Can be null`
+    """
+
+    __table_args__ = (
+        PrimaryKeyConstraint("id", name="id_pk"),
+    )
+
+    def __repr__(self):
+        return "<SqlTeamExperimentDetails ({}, {})>".format(self.team_id, self.experiment_id)
+
+    def to_mlflow_entity(self):
+        """
+        Convert DB model to corresponding MLflow entity.
+
+        :return: :py:class:`mlflow.entities.TeamExperimentDetails`.
+        """
+        return TeamExperimentDetails(
+            id=self.id,
+            team_id=self.team_id,
+            experiment_id=str(self.experiment_id),
+            model_name=self.model_name,
+            version=self.version
+        )
